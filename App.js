@@ -1,21 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
+import AppText from './components/AppText';
+import AppButton from './components/Button';
+import Loginscreen from './screens/loginscreen'
+import AppTextimput from './components/AppTextimput';
+import Proizvod from './screens/proizvod';
+import Korisnik from "./components/Korisnik"
+import Lista from './screens/Lista';
+import Screenlogin from './screens/Screenlogin';
+import Screenregistracija from './screens/Screenregistracija';
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    
+<View>
+
+  <Screenregistracija/>
+    
+ 
+</View>
+    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#aaa',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  view:{
+    
+
+  }
 });
