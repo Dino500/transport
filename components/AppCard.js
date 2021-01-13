@@ -24,16 +24,17 @@ const styles = StyleSheet.create({
     card:{
         backgroundColor: colors.podloga,
         alignItems:"center",
-        width:'95%',
-        margin:10,
-        marginTop:0,
+       
+        
+        marginTop:10,
         padding:0,
         justifyContent:"center",
         borderRadius:30,
         flexDirection:"row",
         justifyContent:"flex-start",
-        overflow:"hidden"
         
+
+elevation: 5,
     },
     image:{
         position:"relative",
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     }
 ,
     font:{
-        fontFamily:"Lato",
+        
 fontSize:18,
 fontWeight:"500",
         padding:1

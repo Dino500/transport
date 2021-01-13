@@ -1,21 +1,103 @@
-import React from 'react';
-import { Button, View ,StyleSheet} from 'react-native';
+import React, { Component } from 'react';
+import { Button, View ,StyleSheet,KeyboardAvoidingView,Keyboard, TouchableWithoutFeedbackBase} from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import AppTextimput from '../components/AppTextimput';
 import AppButton from '../components/Button';
+import {Formik} from 'formik'
+import * as Yup from 'yup'; 
+import AppText from '../components/AppText';
 
-function Screenregistracija(props) {
-    return (
-        <View style={styles.va}>
+import firebase, { firestore }  from "firebase";
+import colors from '../components/colors/colors';
+
+const validation = Yup.object().shape({
+    email: Yup.string().email().required().label("Email"),
+    name: Yup.string().required().min(6),
+    password: Yup.string().required().min(8).label("Password")  
+
+
+})
+
+
+
+
+export class Screenregistracija extends Component {
+    
+    async sungup(prop){
+        await firebase.auth().createUserWithEmailAndPassword(prop.email,prop.password).then(
+             (result)=>{
+                 firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).set(
+                       { email : prop.email, 
+                          name : prop.name}   
+                      );
+                      console.log("kaokoak");
+                
+            }).catch(
+                (error)=>{
+                    console.log(error)}
+            );
+               
+    }
+    
+    render(){
+
+        return (
+            <KeyboardAvoidingView
+    style={{flex:1}}
+    behavior={Platform.OS === "ios" ? "padding" :"height" }
+    keyboardVerticalOffset={-80}
+   
+ >
+        
+        
+        <View style={styles.va}>    
  <View style={styles.va1}>
+ <Formik
+     initialValues={{email:'',name:'', password:''}}
+     onSubmit={this.sungup = this.sungup.bind(this)}
+     validationSchema={validation}
+     
+     >
+{({handleChange,handleSubmit,errors})=> (
+    <>
+    
+        <AppTextimput icon="mail" placeholder="Mail" 
+        onChangeText={handleChange('email')}
+        autoCapitalize="none"
+        autoCompleteType="email"
+        autoCorrect="false"
+    
+        />
+        <AppText style={{color:colors.tipkana}}>{errors.email}</AppText>
+        <AppTextimput icon="person" placeholder="Korisnicko ime i prezime"
+        onChangeText={handleChange('name')}
+        autoCapitalize="none"
+        />
+        <AppText style={{color:colors.tipkana}}>{errors.name}</AppText>
+        <AppTextimput icon="key" placeholder="Lozinka"
+        secureTextEntry
+        onChangeText={handleChange('password')}
+        autoCapitalize="none"
+        />
+        <AppText style={{color:colors.tipkana}}>{errors.password}</AppText>
+       
+        <AppButton title="Uloguj se"  
+        
+        onpress={handleSubmit}
+        ></AppButton>
 
-        <AppTextimput icon="mail" tekst="Mail" style={styles.kut}/>
-        <AppTextimput icon="person" tekst="Korisnicko ime i prezime"style={styles.kut}/>
-        <AppTextimput icon="key" tekst="Lozinka"style={styles.kut}/>
-        <AppButton title="Uloguj se" style={styles.kut} />
+    </>
+
+)}</Formik>
+        
  </View>
-        </View>
+ 
+</View>
+       
 
-    );
+        </KeyboardAvoidingView>
+)
+}
 }
 const styles = StyleSheet.create({
     va:{
@@ -23,16 +105,14 @@ const styles = StyleSheet.create({
         height:"100%", 
         flexDirection:"column",
         justifyContent:"center",
-       alignItems:"center"
-       
+        alignItems:"center"
+        
     },
     va1:{
-       
-       marginBottom:"10%",
+        
+        marginBottom:"0%",
         width:"95%"
     },
-    kut:{
-        marginTop:20
-    }
+  
 });
 export default Screenregistracija;

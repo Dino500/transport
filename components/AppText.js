@@ -2,8 +2,8 @@ import React, { Children } from 'react';
 import { Text,StyleSheet, Platform } from 'react-native';
 
 
-function AppText({children}) {
-    return (<Text style={styles.text}>{children}</Text>);
+function AppText({children,...oderprops}) {
+    return (<Text style={styles.text}{...oderprops}>{children}</Text>);
 }
 
 const styles = StyleSheet.create({
