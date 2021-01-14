@@ -1,34 +1,87 @@
-import React from 'react';
-import { View, Text,StyleSheet } from 'react-native'
-import AppTextimput from '../../components/AppTextimput';
-import Lista  from "./Lista";
-function Main(prop) {
-    return (
-        <View style={styles.ime}>
-            <View style={styles.pretraga}>
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import AppTextimput from "../../components/AppTextimput";
+import Lista from "./Lista";
+import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  createStackNavigator,
+  HeaderBackButton,
+} from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import navigacijatema from "../Navigacija/navigacijatema";
+import { Drowercontent } from "../Drawcontent/Drowcontent";
+import Proizvod from "../proizvod";
 
-            <AppTextimput icon="search" placeholder="pretraga" style={styles.app} ></AppTextimput>
-            <Lista></Lista>
-            </View>
-        </View>
-    );
+import ImageInputList from "../Imagepicker/ImageInput";
+import colors from "../../components/colors/colors";
+
+const Navigacija = createStackNavigator();
+const Drawer = createDrawerNavigator();
+const Navigacija2 = createStackNavigator();
+const Navigacija3 = createStackNavigator();
+const Homestackscreen = ({ navigation }) => (
+  <Navigacija2.Navigator mode="modal">
+    <Navigacija2.Screen
+      name="main"
+      component={Lista}
+      cardStyle={{ backgroundColor: colors.primary }}
+      options={{
+        headerTitle: "Glavna",
+        headerRight: () => (
+          <Ionicons
+            name="add-circle-outline"
+            color={colors.primary}
+            size={30}
+            style={{ paddingRight: 10, paddingTop: 5 }}
+            onPress={() => navigation.navigate("drugi")}
+          />
+        ),
+        headerLeft: () => (
+          <Ionicons.Button
+            name="person-circle-outline"
+            color={colors.primary}
+            size={30}
+            backgroundColor="white"
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
+    <Navigacija3.Screen name="drugi" component={ImageInputList} />
+    <Navigacija3.Screen
+      name="listing"
+      component={Proizvod}
+      options={{ headerShown: false }}
+    />
+  </Navigacija2.Navigator>
+);
+const Detailstackscreen = ({ navigation }) => (
+  <Navigacija3.Navigator></Navigacija3.Navigator>
+);
+
+function Main(prop) {
+  return (
+    <NavigationContainer theme={navigacijatema}>
+      <Drawer.Navigator drawerContent={(props) => <Drowercontent {...props} />}>
+        <Drawer.Screen name="main" component={Homestackscreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
 }
 const styles = StyleSheet.create({
-    ime:{
-        
-        flex:1,
-        borderBottomColor:"white"
-        
-
-    },
-    pretraga:{
-        flex:1,
-        marginLeft:10,
-        marginRight:10,
-        
-    },
-    app:{
-      flex:1
-    }
+  ime: {
+    flex: 1,
+    borderBottomColor: "white",
+  },
+  pretraga: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  app: {
+    flex: 1,
+  },
 });
-export default  Main;
+export default Main;
