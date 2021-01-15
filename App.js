@@ -10,6 +10,8 @@ import {
   createStackNavigator,
   HeaderBackButton,
 } from "@react-navigation/stack";
+import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
+
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -26,6 +28,8 @@ import colors from "./components/colors/colors";
 import ImageInputList from "./screens/Imagepicker/ImageInputList";
 import AppButton from "./components/Button";
 import navigacijatema from "./screens/Navigacija/navigacijatema";
+import Proizvod from "./screens/proizvod";
+import { Drowercontent } from "./screens/Drawcontent/Drowcontent";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCPlbmonMVoxTy5zujgV-FoH1HdJzIsles",
@@ -41,8 +45,6 @@ if (firebase.apps.length === 0) {
 }
 
 const Navigacija = createStackNavigator();
-
-const Navigacija2 = createStackNavigator();
 
 export class App extends Component {
   constructor(props) {
@@ -114,34 +116,9 @@ export class App extends Component {
       );
     }
     return (
-      <NavigationContainer theme={navigacijatema}>
-        <Navigacija2.Navigator>
-          <Navigacija2.Screen
-            name="main"
-            component={Main}
-            cardStyle={{ backgroundColor: colors.primary }}
-            options={{
-              headerRight: () => (
-                <Ionicons
-                  name="add-circle-outline"
-                  color={colors.primary}
-                  size={35}
-                  style={{ paddingRight: 10 }}
-                />
-              ),
-              headerLeft: () => (
-                <Ionicons
-                  name="person"
-                  color={colors.primary}
-                  size={30}
-                  style={{ paddingLeft: 10 }}
-                />
-              ),
-            }}
-          />
-          <Navigacija2.Screen name="drugi" component={ImageInputList} />
-        </Navigacija2.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     );
   }
 }
