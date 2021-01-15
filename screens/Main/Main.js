@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import AppTextimput from "../../components/AppTextimput";
 import Lista from "./Lista";
@@ -61,14 +61,20 @@ const Detailstackscreen = ({ navigation }) => (
   <Navigacija3.Navigator></Navigacija3.Navigator>
 );
 
-function Main(prop) {
-  return (
-    <NavigationContainer theme={navigacijatema}>
-      <Drawer.Navigator drawerContent={(props) => <Drowercontent {...props} />}>
-        <Drawer.Screen name="main" component={Homestackscreen} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
+export class Main extends Component {
+  componentDidMount() {}
+
+  render() {
+    return (
+      <NavigationContainer theme={navigacijatema}>
+        <Drawer.Navigator
+          drawerContent={(props) => <Drowercontent {...props} />}
+        >
+          <Drawer.Screen name="main" component={Homestackscreen} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
 const styles = StyleSheet.create({
   ime: {
