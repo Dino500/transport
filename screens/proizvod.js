@@ -25,7 +25,11 @@ function Proizvod({ route }) {
             >
               {listing.tekst3}
             </Text>
-            <AppButton title={"Kupi"} color="tipkana" styleb="50%"></AppButton>
+            <AppButton
+              title={"Kontaktiraj"}
+              color="tipkana"
+              styleb="50%"
+            ></AppButton>
           </View>
           <Korisnik
             slika={require("../assets/icon.png")}

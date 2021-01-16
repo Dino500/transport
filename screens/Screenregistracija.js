@@ -19,9 +19,17 @@ import "firebase/firestore";
 import colors from "../components/colors/colors";
 
 const validation = Yup.object().shape({
-  email: Yup.string().email().required().label("Email"),
-  name: Yup.string().required().min(6),
-  password: Yup.string().required().min(8).label("Password"),
+  email: Yup.string()
+    .email("Mora biti email")
+    .required("Email se mora unjeti ")
+    .label("Email"),
+  name: Yup.string()
+    .required("Ime i prezime se mora unjeti ")
+    .min(6, "Mora biti minimum 6 karaktera"),
+  password: Yup.string()
+    .required("Lozinka se mora unjeti ")
+    .min(8, "Mora biti minimum 8 karaktera")
+    .label("Password"),
 });
 
 export class Screenregistracija extends Component {

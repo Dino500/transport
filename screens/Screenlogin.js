@@ -26,7 +26,11 @@ const handleSubmit = async (lisnigs) => {
   const result = await firebase
     .auth()
     .signInWithEmailAndPassword(lisnigs.email, lisnigs.password)
-    .then(alert("uspjeh"))
+    .then((result) => {
+      if (!result.user) {
+        alert("Uspjesno");
+      }
+    })
     .catch((error) => alert(error));
 };
 
