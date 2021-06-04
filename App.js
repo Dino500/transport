@@ -82,6 +82,7 @@ export class App extends Component {
       return (
         <NavigationContainer theme={navigacijatema}>
           <Navigacija.Navigator options={{ headerTintColor: colors.tipkana }}>
+            headerBackTitle: "vrati",
             <Navigacija.Screen
               name="welcom"
               component={Loginscreen}
@@ -98,7 +99,6 @@ export class App extends Component {
               options={{
                 headerTransparent: true,
                 backgroundColor: "white",
-                headerBackTitle: "vrati",
                 headerTintColor: colors.tipkana,
               }}
             />
