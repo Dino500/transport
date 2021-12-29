@@ -1,5 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import * as firebase from "firebase/app";
+import firestore from 'firebase/firestore';
 import React, { Component } from "react";
 import {
   Avatar,
@@ -14,7 +15,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 
-var useres;
+let useres;
 export class Drowercontent extends Component {
   state = {
     name: "",
@@ -22,16 +23,17 @@ export class Drowercontent extends Component {
 
   constructor(prop) {
     super(prop);
-    firebase
+    firebase.default
       .firestore()
       .collection("users")
-      .doc(firebase.auth().currentUser.uid)
+      .doc(firebase.default.auth().currentUser.uid)
       .get()
       .then((snapshot) => {
         console.log(snapshot.data().name);
         this.setState({
-          name: snapshot.data().name,
+          name: snapshot.data().name
         });
+        useres = snapshot.data().name;
       });
   }
   render() {
@@ -47,8 +49,8 @@ export class Drowercontent extends Component {
                 />
               </View>
               <View style={{ marginLeft: 20 }}>
-                <Title>{this.state.name}</Title>
-                <Caption>{firebase.auth().currentUser.email}</Caption>
+                <Title>{useres}</Title>
+                <Caption>{firebase.default.auth().currentUser.email}</Caption>
               </View>
             </View>
           </View>
@@ -60,7 +62,7 @@ export class Drowercontent extends Component {
               <Ionicons name="log-out" color={color} size={size} />
             )}
             onPress={() => {
-              firebase.auth().signOut();
+              firebase.default.auth().signOut();
             }}
           ></Drawer.Item>
         </Drawer.Section>

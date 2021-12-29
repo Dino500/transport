@@ -1,6 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { useField } from "formik";
-import * as firebase from "firebase";
+import firebase from 'firebase/app';
+import 'firebase/firestore'
+
+
 import React, { Component, useEffect } from "react";
 import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -40,9 +43,9 @@ const firebaseConfig = {
   appId: "1:856271773667:web:bbd889fe66dfa349308ad6",
   measurementId: "G-5KYZTLEXM8",
 };
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-}
+const app = firebase.initializeApp(firebaseConfig);
+
+
 
 const Navigacija = createStackNavigator();
 
@@ -81,8 +84,8 @@ export class App extends Component {
     if (!loggdIn) {
       return (
         <NavigationContainer theme={navigacijatema}>
-          <Navigacija.Navigator options={{ headerTintColor: colors.tipkana }}>
-            headerBackTitle: "vrati",
+          <Navigacija.Navigator options={{ headerTintColor: colors.tipkana ,headerBackTitle: "vrati"}}>
+            
             <Navigacija.Screen
               name="welcom"
               component={Loginscreen}

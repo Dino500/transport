@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState , useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -11,32 +11,43 @@ import * as ImagePicker from "expo-image-picker";
 
 import colors from "../../components/colors/colors";
 
-function ImageInput({ imageUri, onChangeImage }) {
+let url;
+
+
+function ImageInput({ images, onChangeImage }) {
+  const [image, setImage] = useState(null);
+
+  
   useEffect(() => {
     requestPermission();
   }, []);
 
   const requestPermission = async () => {
-    const { granted } = await ImagePicker.requestCameraRollPermissionsAsync();
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) alert("You need to enable permission to access the library.");
   };
 
   const handlePress = () => {
-    if (!imageUri) selectImage();
+    if (!images) selectImage();
     else
-      Alert.alert("Delete", "Are you sure you want to delete this image?", [
+     Alert.alert("Delete", "Are you sure you want to delete this image?", [
         { text: "Yes", onPress: () => onChangeImage(null) },
         { text: "No" },
-      ]);
+     ]);
+     
+      
   };
 
   const selectImage = async () => {
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
+      let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.cancelled) onChangeImage(result.uri);
+      if (!result.cancelled) { onChangeImage(result.uri)}
+  
+      
+      else{console.log("izasao")}
     } catch (error) {
       console.log("Error reading an image", error);
     }
@@ -45,14 +56,14 @@ function ImageInput({ imageUri, onChangeImage }) {
   return (
     <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.container}>
-        {!imageUri && (
+        {!images && (
           <MaterialCommunityIcons
-            color={colors.podloga}
+            color={colors.tipkana}
             name="camera"
             size={40}
           />
         )}
-        {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+       {images && ( <Image source={{ uri: images }} style={styles.image} />)}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -60,6 +71,7 @@ function ImageInput({ imageUri, onChangeImage }) {
 
 const styles = StyleSheet.create({
   container: {
+    
     alignItems: "center",
     backgroundColor: colors.podloga,
     borderRadius: 15,
@@ -72,6 +84,7 @@ const styles = StyleSheet.create({
   image: {
     height: "100%",
     width: "100%",
+    
   },
 });
 

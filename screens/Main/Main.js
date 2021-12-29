@@ -13,8 +13,9 @@ import navigacijatema from "../Navigacija/navigacijatema";
 import { Drowercontent } from "../Drawcontent/Drowcontent";
 import Proizvod from "../proizvod";
 
-import ImageInputList from "../Imagepicker/ImageInput";
+import ImageInputList from "../Imagepicker/ImageInputList";
 import colors from "../../components/colors/colors";
+import imagelista from "../Imagepicker/imagelista";
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -34,7 +35,7 @@ const Homestackscreen = ({ navigation }) => (
             color={colors.primary}
             size={30}
             style={{ paddingRight: 10, paddingTop: 5 }}
-            onPress={() => navigation.navigate("drugi")}
+            onPress={() => navigation.navigate("Dodaj")}
           />
         ),
         headerLeft: () => (
@@ -49,7 +50,7 @@ const Homestackscreen = ({ navigation }) => (
         ),
       }}
     />
-    <Navigacija3.Screen name="drugi" component={ImageInputList} />
+    <Navigacija3.Screen name="Dodaj" component={imagelista} />
     <Navigacija3.Screen
       name="listing"
       component={Proizvod}

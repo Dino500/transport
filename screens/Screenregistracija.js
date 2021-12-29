@@ -15,7 +15,9 @@ import * as Yup from "yup";
 import AppText from "../components/AppText";
 
 import * as firebase from "firebase/app";
-import "firebase/firestore";
+
+import 'firebase/firestore';
+
 import colors from "../components/colors/colors";
 
 const validation = Yup.object().shape({
@@ -34,14 +36,14 @@ const validation = Yup.object().shape({
 
 export class Screenregistracija extends Component {
   async spapi(prop) {
-    await firebase
+    await firebase.default
       .firestore()
       .collection("users")
-      .doc(firebase.auth().currentUser.uid)
+      .doc(firebase.default.auth().currentUser.uid)
       .set({ email: prop.email, name: prop.name });
   }
   async sungup(prop) {
-    await firebase
+    await firebase.default
       .auth()
       .createUserWithEmailAndPassword(prop.email, prop.password)
       .then((result) => {
