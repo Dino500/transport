@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   TextInput,
@@ -10,7 +10,17 @@ import {
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "./colors/colors";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-function AppTextimput({ icon, ...otherprops }) {
+function AppTextimput({ icon,icon2,klik, ...otherprops }) {
+  const [tipka , settipka] = useState(false)
+
+
+  useEffect(() => {
+    if(tipka){
+      klik()
+    }
+    settipka(false)
+  }, [tipka]);
+  
   return (
     <SafeAreaView style={styles.kako}>
       <View style={styles.tekst}>
@@ -26,6 +36,7 @@ function AppTextimput({ icon, ...otherprops }) {
           style={styles.tek}
           {...otherprops}
         ></TextInput>
+        <Ionicons name={icon2} size={32} color="darkgray" style={styles.icon} onPress={() => settipka(true)} />
       </View>
     </SafeAreaView>
   );

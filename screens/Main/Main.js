@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import AppTextimput from "../../components/AppTextimput";
 import Lista from "./Lista";
 import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -51,6 +50,7 @@ const Homestackscreen = ({ navigation }) => (
       }}
     />
     <Navigacija3.Screen name="Dodaj" component={imagelista} />
+    <Navigacija3.Screen name="account" component={imagelista} />
     <Navigacija3.Screen
       name="listing"
       component={Proizvod}
@@ -72,6 +72,7 @@ export class Main extends Component {
           drawerContent={(props) => <Drowercontent {...props} />}
         >
           <Drawer.Screen name="main" component={Homestackscreen} />
+          <Drawer.Screen name="list" component={imagelista} />
         </Drawer.Navigator>
       </NavigationContainer>
     );

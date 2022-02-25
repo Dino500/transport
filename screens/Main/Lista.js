@@ -1,21 +1,23 @@
-import React, { Component } from "react";
+import React, { Component , useState , useEffect} from "react";
 import { FlatList, SafeAreaView, StyleSheet } from "react-native";
 import { event } from "react-native-reanimated";
 import AppCard from "../../components//AppCard";
 import AppTextimput from "../../components/AppTextimput";
+import FilterModal from "./FilterModal";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { View } from "react-native-web";
 
-export class Lista extends Component {
-  constructor() {
-    super();
-    this.state = {
-      query: null,
-      dataSource: [],
-      dataBackup: [],
-    };
-  }
+function Lista(props
+){
+  
+  const [query , setquery] = useState(null)
+  const [dataSource , setdataSource] = useState([])
+  const [dataBackup , setdataBackup] = useState([])
+  const [showFilterModal, setShowFilterModal] = useState(false)
+  
 
-  componentDidMount() {
-    var data = [
+  useEffect(()=> {
+    let data = [
       {
         id: 1,
         tekst1: "Zagreb - Mostar",
@@ -67,31 +69,55 @@ export class Lista extends Component {
       },
     ];
 
-    this.setState({
-      dataSource: data,
-      dataBackup: data,
-    });
-  }
+   
 
-  filterItem(tekstZatraziti) {
-    this.setState({
-      dataSource: this.state.dataBackup.filter((i) =>
-        i.tekst1.toLowerCase().includes(tekstZatraziti.toLowerCase())
-      ),
-    });
-  }
+    setdataBackup(data)
+    setdataSource(data)
+  },[]);
 
-  render() {
+  function filterItem(tekstZatraziti){
+
+    var dat = dataBackup
+    
+    setdataSource(dataBackup.filter( i =>
+    i.tekst1.toLowerCase().includes(tekstZatraziti.toLowerCase()))
+    )
+      
+    if(tekstZatraziti == ''){
+
+      setdataSource(dataBackup)
+    }
+
+  };
+
+  
+
     return (
+
+
       <SafeAreaView style={styles.ime}>
-        <AppTextimput
-          icon="search"
+
+      {/* Filter screeen */}
+      {showFilterModal &&
+    <FilterModal isVisible={showFilterModal} onClose={ () => setShowFilterModal(false)}></FilterModal>
+       }
+
+       <AppTextimput
+         icon="search"
+         icon2="filter"
+         klik={() => setShowFilterModal(true)}
           placeholder="pretraga"
           style={styles.app}
-          onChangeText={(text) => this.filterItem(text)}
-        ></AppTextimput>
+          onChangeText={(text) => filterItem(text)}
+          
+        >
+          
+        </AppTextimput>
+        
+
+        
         <FlatList
-          data={this.state.dataSource}
+          data={dataSource}
           keyExtractor={(listing) => listing.id.toString()}
           renderItem={({ item }) => (
             <AppCard
@@ -99,7 +125,7 @@ export class Lista extends Component {
               tekst2={item.tekst2}
               tekst3={item.tekst3}
               slika={item.slika}
-              onPress={() => this.props.navigation.navigate("listing", item)}
+              onPress={() => props.navigation.navigate("listing", item)}
             />
           )}
           showsVerticalScrollIndicator="false"
@@ -107,7 +133,7 @@ export class Lista extends Component {
       </SafeAreaView>
     );
   }
-}
+
 const styles = StyleSheet.create({
   ime: {
     flex: 1,
@@ -128,5 +154,8 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
   },
+  AppTextimput: {
+    paddingRight:'28px' 
+  }
 });
 export default Lista;
