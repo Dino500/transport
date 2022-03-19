@@ -54,7 +54,10 @@ export class Drowercontent extends Component {
                 <Caption>{firebase.default.auth().currentUser.email}</Caption>
               </View>
             </View>
-          </View><Drawer.Item
+          </View>
+          
+          <Drawer.Section style={styles.profil}>
+          <Drawer.Item 
             label="Profil"
             icon={({ color, size }) => (
               <Ionicons name="person" color={"gray"} size={20} />
@@ -63,12 +66,23 @@ export class Drowercontent extends Component {
                this.props.navigation.navigate("Dodaj")
             }}
           ></Drawer.Item>
+            </Drawer.Section>
+           <Drawer.Item 
+            label="Postavke"
+            icon={({ color, size }) => (
+              <Ionicons name="settings" color={"gray"} size={20} />
+            )}
+            onPress={() => {
+               this.props.navigation.navigate("setings")
+            }}
+          ></Drawer.Item>
+
         </DrawerContentScrollView>
         <Drawer.Section style={styles.boromdrower}>
           <Drawer.Item
             label="Odjavi se"
             icon={({ color, size }) => (
-              <Ionicons style={styles.Ionicons} name="log-out" color={color} size={size} />
+              <Ionicons style={styles.Ionicons} name="log-out" color={"gray"} size={20} />
             )}
             onPress={() => {
               firebase.default.auth().signOut();
@@ -89,8 +103,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
    
   },
-  Ionicons: {
-    backgroundColor:"red"
-
+  profil: {
+    paddingTop: 30
   }
+
+  
 });

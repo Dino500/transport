@@ -15,6 +15,7 @@ import Proizvod from "../proizvod";
 import ImageInputList from "../Imagepicker/ImageInputList";
 import colors from "../../components/colors/colors";
 import imagelista from "../Imagepicker/imagelista";
+import setings from "../Profil/setings";
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -50,6 +51,7 @@ const Homestackscreen = ({ navigation }) => (
       }}
     />
     <Navigacija3.Screen name="Dodaj" component={imagelista} />
+    <Navigacija3.Screen name="setings" component={setings}/>
     <Navigacija3.Screen name="account" component={imagelista} />
     <Navigacija3.Screen
       name="listing"
@@ -72,6 +74,7 @@ export class Main extends Component {
           drawerContent={(props) => <Drowercontent {...props} />}
         >
           <Drawer.Screen name="main" component={Homestackscreen} />
+          <Drawer.Screen name="setings" component={setings} />
           <Drawer.Screen name="list" component={imagelista} />
         </Drawer.Navigator>
       </NavigationContainer>

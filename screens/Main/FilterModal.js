@@ -37,8 +37,8 @@ const [showFilterModal, setFilterModal] = useState(isVisible)
 
     }
 
-    function slideri(){
 
+    function slideri(){
         return(
                 <View>
             <Section title={"daljina"} manja={10}   veca={1000}>
@@ -54,11 +54,15 @@ const [showFilterModal, setFilterModal] = useState(isVisible)
         )
     }
 
+
+
+    // {Animacije otvaranje i zatvaranje pretrage}
+    
 useEffect(() => {
   if(showFilterModal){
     Animated.timing(animacija, {
         toValue:1,
-        duration:200,
+        duration:300,
         useNativeDriver:false,
         
     }).start();
@@ -78,7 +82,7 @@ useEffect(() => {
 
 const modalY = animacija.interpolate({
     inputRange: [0,1],
-    outputRange:[useWindowDimensions().height + 640 , useWindowDimensions().height + 70 ]
+    outputRange:[useWindowDimensions().height , 100 ]
 })
 
 
@@ -98,31 +102,27 @@ return(
             }}
             onPress={()=> setFilterModal(false)}
             >
-                    
-                     
-                     
+      
             {/* Transparent Bacground  */}
 
             <TouchableWithoutFeedback
-            onPress={()=> setFilterModal(false)}
-            
-            >
+            onPress={()=> setFilterModal(false)}>
+
                 <View style={{
                     position: 'absolute',
                     top: 0,
                     bottom: 0 , 
                     left: 0, 
-                    right: 0,
-                    
+                    right: 0
                 }}>
-
                 </View>
+
             </TouchableWithoutFeedback>
+            
             <Animated.View
-                
                 style={{
                     position:"absolute",
-                    top:modalY,
+                   top:modalY,
                     bottom:0,
                     left:0,
                     right:0,
@@ -132,15 +132,12 @@ return(
                     padding:20
                 }}
             >
-                {/* header section */}
-
+                {/* Naslov pretrage section */}
 
                 <View
                 style={{
                     flexDirection: 'row', 
-                    alignItems: 'center'
-
-                }}
+                    alignItems: 'center' }}
                 >
                     <Text style={{
                         flex:1 ,
@@ -151,7 +148,9 @@ return(
                 </View>
                 <View>
 
+                {/* {Prvi slider za udaljenost} */}
                 {slideri()}
+
                 </View>
             </Animated.View>
             </View>
