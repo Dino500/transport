@@ -6,7 +6,17 @@ import RangeSlider, { Slider } from 'react-native-range-slider-expo';
 import colorts from '../../components/colors/colors';
 import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 import { render } from 'react-dom';
-
+import {
+    Avatar,
+    Title,
+    Caption,
+    Paragraph,
+    Drawer,
+    TouchableRipple,
+    Switch,
+    Chip
+    
+  } from "react-native-paper";
 
 
 const FilterModal =({isVisible , onClose}) =>  {
@@ -49,7 +59,7 @@ const [showFilterModal, setFilterModal] = useState(isVisible)
             fromValueOnChange={value => setFromValue(value)}
             toValueOnChange={value => setToValue(value)}
             ></RangeSlider>
-
+           
             </View>
         )
     }
@@ -150,7 +160,14 @@ return(
 
                 {/* {Prvi slider za udaljenost} */}
                 {slideri()}
+                <View style={{flexDirection:"row" ,justifyContent:"space-around"}}>
 
+<Chip icon="star" selected="true" >5 </Chip>
+<Chip icon="star" selected="true" >4</Chip>
+<Chip icon="star" selected="true"  >3</Chip>
+<Chip icon="star" selected="true">2</Chip>
+<Chip icon="star" selected="true">1</Chip>
+</View>
                 </View>
             </Animated.View>
             </View>

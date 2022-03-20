@@ -74,7 +74,7 @@ export class Main extends Component {
           drawerContent={(props) => <Drowercontent {...props} />}
         >
           <Drawer.Screen name="main" component={Homestackscreen} />
-          <Drawer.Screen name="setings" component={setings} />
+          <Drawer.Screen name="setingss" component={setings} />
           <Drawer.Screen name="list" component={imagelista} />
         </Drawer.Navigator>
       </NavigationContainer>
