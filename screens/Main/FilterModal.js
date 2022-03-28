@@ -24,16 +24,13 @@ const [showFilterModal, setFilterModal] = useState(isVisible)
 
     const animacija = useRef(new Animated.Value(0)).current
     const [fromValue, setFromValue] = useState(0);
-     const [toValue, setToValue] = useState(0);
+     const [toValue, setToValue] = useState(1000);
      const [value, setValue] = useState(0);
 
     const Section = ({title}) => {
        return( <View
-
         style={{
-
             marginTop:20,
-            
         }}
         >
 
@@ -51,11 +48,15 @@ const [showFilterModal, setFilterModal] = useState(isVisible)
     function slideri(){
         return(
                 <View>
-            <Section title={"daljina"} manja={10}   veca={1000}>
+            <Section title={"daljina"} manja={10} veca={1000}>
 
             </Section>
+            <View style={{flexDirection:"row-reverse"}}>
+                
+            <Text style={{ paddingTop:10 }}>{fromValue}-{toValue}</Text>
+            </View>
             <RangeSlider
-            min={10} max={1000} initialFromValue={12}
+            min={0} max={1000} initialFromValue={12}
             fromValueOnChange={value => setFromValue(value)}
             toValueOnChange={value => setToValue(value)}
             ></RangeSlider>
@@ -143,7 +144,6 @@ return(
                 }}
             >
                 {/* Naslov pretrage section */}
-
                 <View
                 style={{
                     flexDirection: 'row', 
@@ -156,19 +156,20 @@ return(
                     }}>Filtriraj pretragu</Text>
                     <Ionicons name={'close'} size={32} color="darkgray" onPress={()=> setFilterModal(false)} style={{borderWidth:2 , borderColor: 'lightgray' , borderRadius:10}} />
                 </View>
-                <View>
+                
+                <View style={{height:170}}>
 
                 {/* {Prvi slider za udaljenost} */}
                 {slideri()}
+                </View>
                 <View style={{flexDirection:"row" ,justifyContent:"space-around"}}>
 
-<Chip icon="star" selected="true" >5 </Chip>
-<Chip icon="star" selected="true" >4</Chip>
-<Chip icon="star" selected="true"  >3</Chip>
+<Chip icon="star" selected="true">5 </Chip>
+<Chip icon="star" selected="true">4</Chip>
+<Chip icon="star" selected="true">3</Chip>
 <Chip icon="star" selected="true">2</Chip>
 <Chip icon="star" selected="true">1</Chip>
 </View>
-                </View>
             </Animated.View>
             </View>
             </Modal>

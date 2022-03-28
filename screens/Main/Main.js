@@ -14,17 +14,17 @@ import Proizvod from "../proizvod";
 
 import ImageInputList from "../Imagepicker/ImageInputList";
 import colors from "../../components/colors/colors";
-import imagelista from "../Imagepicker/imagelista";
-import setings from "../Profil/setings";
+import Imagelista from "../Imagepicker/Imagelista";
+import Setings from "../Profil/Setings";
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Navigacija2 = createStackNavigator();
 const Navigacija3 = createStackNavigator();
 const Homestackscreen = ({ navigation }) => (
-  <Navigacija2.Navigator mode="modal">
+  <Navigacija2.Navigator >
     <Navigacija2.Screen
-      name="main"
+      name="Glavni"
       component={Lista}
       cardStyle={{ backgroundColor: colors.primary }}
       options={{
@@ -50,13 +50,13 @@ const Homestackscreen = ({ navigation }) => (
         ),
       }}
     />
-    <Navigacija3.Screen name="Dodaj" component={imagelista} />
-    <Navigacija3.Screen name="setings" component={setings}/>
-    <Navigacija3.Screen name="account" component={imagelista} />
-    <Navigacija3.Screen
+    <Navigacija3.Screen name="Dodaj" component={Imagelista} />
+    <Navigacija3.Screen name="Setings" component={Setings}/>
+    <Navigacija3.Screen name="account" component={Imagelista} />
+    <Navigacija3.Screen 
       name="listing"
       component={Proizvod}
-      options={{ headerShown: false }}
+      options={{ headerShown: false , presentation: "modal"}}
     />
   </Navigacija2.Navigator>
 );
@@ -69,13 +69,17 @@ export class Main extends Component {
 
   render() {
     return (
-      <NavigationContainer theme={navigacijatema}>
-        <Drawer.Navigator
+      <NavigationContainer theme={navigacijatema }  >
+        <Drawer.Navigator 
           drawerContent={(props) => <Drowercontent {...props} />}
+          screenOptions={{
+            headerShown: false
+            
+          }}
         >
-          <Drawer.Screen name="main" component={Homestackscreen} />
-          <Drawer.Screen name="setingss" component={setings} />
-          <Drawer.Screen name="list" component={imagelista} />
+          <Drawer.Screen name="Main" component={Homestackscreen} />
+          <Drawer.Screen name="setingss" component={Setings} />
+          <Drawer.Screen name="list" component={Imagelista} />
         </Drawer.Navigator>
       </NavigationContainer>
     );

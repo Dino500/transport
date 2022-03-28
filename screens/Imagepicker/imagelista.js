@@ -5,7 +5,7 @@ import { useState } from 'react';
 import ImageInput from './ImageInput';
 import ImageInputList from './ImageInputList';
 
-function imagelista(props) {
+function Imagelista(props) {
     const [images, setImages] = useState([]);
     
     const handleAdd = uri => {
@@ -25,5 +25,5 @@ function imagelista(props) {
     )
 }
 
-export default imagelista
+export default Imagelista
 

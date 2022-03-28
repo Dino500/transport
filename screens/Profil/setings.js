@@ -12,6 +12,7 @@ import {
     TouchableRipple,
     Switch,
     Text,
+    Button,
     
   } from "react-native-paper";
   import { Ionicons } from "@expo/vector-icons";
@@ -19,17 +20,19 @@ import { backgroundColor, borderColor } from 'react-native/Libraries/Components/
 import * as ImagePicker from "expo-image-picker";
 import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-import firebase from 'firebase/app'
-import { Button } from 'react-native-web';
+import firebase from 'firebase';
+
+import {} from 'firebase/storage'
+import FilterModal from '../Main/FilterModal';
+
+import colors from '../../components/colors/colors'
 
 
-
-
-
-const setings = () =>  {
+const Setings = () =>  {
     const [image, setImage] = useState(null);
     const [userdata , setuserdata] = useState();
-    
+    const [uploading, setuploading] = useState(false);
+    const [urlslike , seturlslike] =useState("");
 
     const getuser = async() =>{
 
@@ -91,31 +94,58 @@ const setings = () =>  {
 
 
      const Upload = async() => {
-
       const { uri } = image;
       const filename = uri.substring(uri.lastIndexOf('/') + 1);
       const uploadUri =  uri.replace('file://', '') ;
-      console.log(uploadUri)
 
+
+        
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function() {
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uploadUri, true);
+        xhr.send(null);
+      });
   
   
-  
-  
-  
-  
-  const url = await firebase.default
-      .storage()
-      .ref(filename)
-      .putFile(uploadUri)
-      .then((snapshot) => {
-        Alert.alert(
-          'Photo uploaded!',
-          'Your photo has been uploaded to Firebase Cloud Storage!'
+        const ref = firebase.storage().ref().child(filename)
+
+        const snapshot = ref.put(blob)
+
+
+        snapshot.on(firebase.storage.TaskEvent.STATE_CHANGED,()=>{
+          setuploading(true)
+
+        }
+        ,(error)=>{
+          setuploading(false)
+          console.log(error)
+          blob.close();
+          return
+        },
+        ()=>{
+          snapshot.snapshot.ref.getDownloadURL().then((url)=>{
+            setuploading(false)
+            console.log(url)
+            blob.close();
+            setuserdata({...userdata, nesto: url})
+            
+            return url;
+          })
+        }
         );
-      })
-      .catch((e) => console.log('uploading image error => ', e));
-
-    }
+  
+      
+     
+     }
+        
+  
 
 
 
@@ -130,29 +160,30 @@ const setings = () =>  {
  
  
     return(
-        <SafeAreaView style={{   paddingHorizontal:20}}>
+        <SafeAreaView style={{   marginHorizontal:20}}>
             <View>
+              <View style={{flexDirection:"row"}}>
+
             <TouchableWithoutFeedback onPress={handlePress} >
             <Avatar.Image
-                  source={ userdata ? image : "" }
+                  source={ userdata ? userdata.nesto : "" }
                   size={100}
-                  
-                  
-                  
-                  
-                  
                   >
                 </Avatar.Image>
+                
                 <View style={{borderRadius:100 ,marginTop:20,marginLeft:20 ,overflow:"hidden",position:"absolute"}}>
 
                     <Ionicons name='camera-outline'  size={50} style={{ opacity:0.7 ,padding:5, backgroundColor:"gray" ,  }} color="white" ></Ionicons>
                 </View>
-
-                
                 </TouchableWithoutFeedback>
-                    </View>
+                <View>  
+                <Title style={{paddingTop:20, paddingLeft:20}}>{userdata ? userdata.name : ""}</Title>
+                <Caption style={{ paddingLeft:20}}>{userdata ? userdata.email : ""}</Caption>
+                </View>
+                </View>
+                </View>
 
-                    <TouchableWithoutFeedback style={{backgroundColor:"red" ,width:50,height:50 }} onPress={Upload}></TouchableWithoutFeedback>
+                    
 
             <AppText style={{paddingTop: 10  }} maxLength={10} keyboardType='numeric'>Broj telefona</AppText >
 <AppTextimput 
@@ -174,8 +205,8 @@ onChangeText={(txt)=>setuserdata({...userdata,ime: txt})}
 value={userdata ? userdata.lokacija : ""}
 onChangeText={(txt)=>setuserdata({...userdata,lokacija: txt})}
 >
-  
 </AppTextimput>
+<TouchableWithoutFeedback style={{backgroundColor:"#FF2865" , justifyContent:"space-around" ,height:50 , marginTop:20 }} onPress={Upload}><Text style={{alignContent:"center"}}>Sačuvja</Text></TouchableWithoutFeedback>
 
         </SafeAreaView>
 
@@ -184,4 +215,4 @@ onChangeText={(txt)=>setuserdata({...userdata,lokacija: txt})}
  )   
 }
 
-export default setings; 
+export default Setings; 

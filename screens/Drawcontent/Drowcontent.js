@@ -73,7 +73,7 @@ export class Drowercontent extends Component {
               <Ionicons name="settings" color={"gray"} size={20} />
             )}
             onPress={() => {
-               this.props.navigation.navigate("setings")
+               this.props.navigation.navigate("Setings")
             }}
           ></Drawer.Item>
 
