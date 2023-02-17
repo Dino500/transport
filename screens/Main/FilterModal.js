@@ -4,6 +4,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import RangeSlider, { Slider } from 'react-native-range-slider-expo';
 
 import colorts from '../../components/colors/colors';
+import Button from '../../components/Button'
 import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 import { render } from 'react-dom';
 import {
@@ -30,7 +31,7 @@ const [showFilterModal, setFilterModal] = useState(isVisible)
     const Section = ({title}) => {
        return( <View
         style={{
-            marginTop:20,
+            marginTop:10,
         }}
         >
 
@@ -45,18 +46,18 @@ const [showFilterModal, setFilterModal] = useState(isVisible)
     }
 
 
-    function slideri(){
+    function slideri(ime, max , min ){
         return(
                 <View>
-            <Section title={"daljina"} manja={10} veca={1000}>
+            <Section title={ime} manja={min} veca={max}>
 
             </Section>
             <View style={{flexDirection:"row-reverse"}}>
                 
-            <Text style={{ paddingTop:10 }}>{fromValue}-{toValue}</Text>
+            <Text style={{ paddingTop:0 }}>{fromValue}-{toValue}</Text>
             </View>
             <RangeSlider
-            min={0} max={1000} initialFromValue={12}
+            min={min} max={max} initialFromValue={500}
             fromValueOnChange={value => setFromValue(value)}
             toValueOnChange={value => setToValue(value)}
             ></RangeSlider>
@@ -157,11 +158,15 @@ return(
                     <Ionicons name={'close'} size={32} color="darkgray" onPress={()=> setFilterModal(false)} style={{borderWidth:2 , borderColor: 'lightgray' , borderRadius:10}} />
                 </View>
                 
-                <View style={{height:170}}>
+                <View style={{height:150}}>
 
                 {/* {Prvi slider za udaljenost} */}
-                {slideri()}
+                {slideri("daljina",1000,0)}
                 </View>
+                 <View style={{height:170}}>
+
+                {slideri("cijena",10000,0)}
+                 </View>
                 <View style={{flexDirection:"row" ,justifyContent:"space-around"}}>
 
 <Chip icon="star" selected="true">5 </Chip>
@@ -170,6 +175,13 @@ return(
 <Chip icon="star" selected="true">2</Chip>
 <Chip icon="star" selected="true">1</Chip>
 </View>
+<View style={{paddingTop:20}}>
+
+<Button color='primary' title={"Potvrdi"} onpress={()=> setFilterModal(false)} ></Button>
+</View>
+
+
+
             </Animated.View>
             </View>
             </Modal>

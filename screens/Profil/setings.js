@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View,Image,Alert,Platform } from "react-native";
 import AppTextimput from "../../components/AppTextimput";
 import AppText from "../../components/AppText";
+import Buttons from '../../components/Button'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
     Avatar,
@@ -145,19 +146,6 @@ const Setings = () =>  {
      
      }
         
-  
-
-
-
-
-
-
-
-
-
-
-
- 
  
     return(
         <SafeAreaView style={{   marginHorizontal:20}}>
@@ -166,7 +154,7 @@ const Setings = () =>  {
 
             <TouchableWithoutFeedback onPress={handlePress} >
             <Avatar.Image
-                  source={ userdata ? userdata.nesto : "" }
+                  source={ userdata ? userdata.nesto : require("../../assets/icon.png") }
                   size={100}
                   >
                 </Avatar.Image>
@@ -182,7 +170,13 @@ const Setings = () =>  {
                 </View>
                 </View>
                 </View>
-
+                <AppText style={{paddingTop: 10  }} maxLength={10} keyboardType='numeric'>Ime prezime</AppText >
+<AppTextimput 
+value={userdata ? userdata.name : ""}
+onChangeText={(txt)=>setuserdata({...userdata,name: txt})}
+>
+  
+</AppTextimput>
                     
 
             <AppText style={{paddingTop: 10  }} maxLength={10} keyboardType='numeric'>Broj telefona</AppText >
@@ -206,9 +200,9 @@ value={userdata ? userdata.lokacija : ""}
 onChangeText={(txt)=>setuserdata({...userdata,lokacija: txt})}
 >
 </AppTextimput>
-<TouchableWithoutFeedback style={{backgroundColor:"#FF2865" , justifyContent:"space-around" ,height:50 , marginTop:20 }} onPress={Upload}><Text style={{alignContent:"center"}}>Sačuvja</Text></TouchableWithoutFeedback>
 
-        </SafeAreaView>
+<Buttons title={"Sačuvaj"} color={"tipkana"}> </Buttons>
+</SafeAreaView>
 
 
 

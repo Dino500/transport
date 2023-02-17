@@ -1,10 +1,13 @@
 import React from 'react';
-import { View ,StyleSheet,Image , Text} from 'react-native';
+import { View ,StyleSheet,Image , Text, TouchableWithoutFeedback} from 'react-native';
 import AppText from './AppText'; 
 import colors from './colors/colors';
-function Korisnik({tekst1, tekst2, slika}) {
+function Korisnik({tekst1, tekst2, slika, onPress}) {
     return (
-        <View style={styles.card}>
+        
+
+        <TouchableWithoutFeedback  onPress={onPress}>
+            <View style={styles.card}>
 
 <Image source={slika} style={styles.slika} ></Image>
 <View style={styles.tekst}>
@@ -15,8 +18,10 @@ function Korisnik({tekst1, tekst2, slika}) {
     <Text style={styles.font}>{tekst2}</Text>
     
 </View>
+            </View>
     
-        </View>
+        </TouchableWithoutFeedback >
+        
     );
 }
 const styles = StyleSheet.create({

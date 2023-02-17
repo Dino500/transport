@@ -40,7 +40,7 @@ export class Screenregistracija extends Component {
       .firestore()
       .collection("users")
       .doc(firebase.default.auth().currentUser.uid)
-      .set({ email: prop.email, name: prop.name });
+      .set({ email: prop.email, name: prop.name, broj_telefona: "null" , ime: "null" , nesto: "null"});
   }
   async sungup(prop) {
     await firebase.default

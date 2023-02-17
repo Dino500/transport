@@ -5,7 +5,7 @@ import AppText from "../components/AppText";
 import AppButton from "../components/Button";
 import colors from "../components/colors/colors";
 import Korisnik from "../components/Korisnik";
-function Proizvod({ route }) {
+function Proizvod({ route ,navigation}) {
   const listing = route.params;
   return (
     <View style={styles.card}>
@@ -35,6 +35,7 @@ function Proizvod({ route }) {
             slika={require("../assets/icon.png")}
             tekst1="Korisnik 123  "
             tekst2=" 50 objava"
+            onPress={() => navigation.navigate("Korisnik")}
           ></Korisnik>
           <Text style={styles.font2}>
             {listing.tekst2} {"     8:30"}{" "}

@@ -17,6 +17,17 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 
 let useres;
+
+const nesto =  async() => {
+  const currentUser = await firebase.default.firestore().collection('users').doc(firebase.default.auth().currentUser.uid).get().then((documentSnapshot) => {
+    if (documentSnapshot.exists) {
+        console.log(documentSnapshot.data())
+          useres= documentSnapshot.data().name
+    }
+})
+}
+
+
 export class Drowercontent extends Component {
   state = {
     name: "",
@@ -24,19 +35,11 @@ export class Drowercontent extends Component {
 
   constructor(prop) {
     super(prop);
-    firebase.default
-      .firestore()
-      .collection("users")
-      .doc(firebase.default.auth().currentUser.uid)
-      .get()
-      .then((snapshot) => {
-        console.log(snapshot.data().name);
-        this.setState({
-          name: snapshot.data().name
-        });
-        useres = snapshot.data().name;
-      });
+    nesto();
   }
+
+
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -50,7 +53,7 @@ export class Drowercontent extends Component {
                 />
               </View>
               <View style={{ marginLeft: 20 }}>
-                <Title>{useres}</Title>
+                <Title></Title>
                 <Caption>{firebase.default.auth().currentUser.email}</Caption>
               </View>
             </View>
@@ -63,7 +66,7 @@ export class Drowercontent extends Component {
               <Ionicons name="person" color={"gray"} size={20} />
             )}
             onPress={() => {
-               this.props.navigation.navigate("Dodaj")
+               this.props.navigation.navigate("Korisnik")
             }}
           ></Drawer.Item>
             </Drawer.Section>
@@ -74,6 +77,15 @@ export class Drowercontent extends Component {
             )}
             onPress={() => {
                this.props.navigation.navigate("Setings")
+            }}
+          ></Drawer.Item>
+          <Drawer.Item 
+            label="Korinik"
+            icon={({ color, size }) => (
+              <Ionicons name="add" color={"gray"} size={20} />
+            )}
+            onPress={() => {
+               this.props.navigation.navigate("Dodaj")
             }}
           ></Drawer.Item>
 

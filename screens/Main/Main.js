@@ -11,7 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import navigacijatema from "../Navigacija/navigacijatema";
 import { Drowercontent } from "../Drawcontent/Drowcontent";
 import Proizvod from "../proizvod";
-
+import Korisnik2 from '../Korisnik/Korisnik2'
 import ImageInputList from "../Imagepicker/ImageInputList";
 import colors from "../../components/colors/colors";
 import Imagelista from "../Imagepicker/Imagelista";
@@ -52,6 +52,7 @@ const Homestackscreen = ({ navigation }) => (
     />
     <Navigacija3.Screen name="Dodaj" component={Imagelista} />
     <Navigacija3.Screen name="Setings" component={Setings}/>
+    <Navigacija3.Screen name="Korisnik" component={Korisnik2}/>
     <Navigacija3.Screen name="account" component={Imagelista} />
     <Navigacija3.Screen 
       name="listing"
@@ -79,6 +80,7 @@ export class Main extends Component {
         >
           <Drawer.Screen name="Main" component={Homestackscreen} />
           <Drawer.Screen name="setingss" component={Setings} />
+          <Drawer.Screen name="korisnikk" component={Korisnik2} />
           <Drawer.Screen name="list" component={Imagelista} />
         </Drawer.Navigator>
       </NavigationContainer>

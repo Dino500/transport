@@ -20,6 +20,7 @@ function Lista(props
     let data = [
       {
         id: 1,
+        user: "neko1",
         tekst1: "Zagreb - Mostar",
         tekst3: "900KM",
         tekst2: "10.1.2021",
@@ -48,6 +49,7 @@ function Lista(props
       },
       {
         id: 5,
+        user: "neko1",
         tekst1: "Sarajevo - Mostar",
         tekst3: "350KM",
         tekst2: "5.5.2021",
@@ -62,6 +64,7 @@ function Lista(props
       },
       {
         id: 7,
+        user: "neko1",
         tekst1: "Sarajevo - Mostar",
         tekst3: "500KM",
         tekst2: "8.7.2021",
