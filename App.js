@@ -33,17 +33,6 @@ import navigacijatema from './screens/Navigacija/navigacijatema';
 import Proizvod from './screens/proizvod';
 import { Drowercontent } from './screens/Drawcontent/Drowcontent';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyCPlbmonMVoxTy5zujgV-FoH1HdJzIsles',
-  authDomain: 'transport-806c6.firebaseapp.com',
-  projectId: 'transport-806c6',
-  storageBucket: 'transport-806c6.appspot.com',
-  messagingSenderId: '856271773667',
-  appId: '1:856271773667:web:bbd889fe66dfa349308ad6',
-  measurementId: 'G-5KYZTLEXM8',
-};
-const app = firebase.initializeApp(firebaseConfig);
-
 const Navigacija = createStackNavigator();
 
 export class App extends Component {

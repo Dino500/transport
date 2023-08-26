@@ -1,146 +1,153 @@
-import React, { Component , useState , useEffect} from "react";
-import { FlatList, SafeAreaView, StyleSheet } from "react-native";
-import { event } from "react-native-reanimated";
-import AppCard from "../../components//AppCard";
-import AppTextimput from "../../components/AppTextimput";
-import FilterModal from "./FilterModal";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { View } from "react-native-web";
+import React, { Component, useState, useEffect } from 'react';
+import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import { event } from 'react-native-reanimated';
+import AppCard from '../../components//AppCard';
+import AppTextimput from '../../components/AppTextimput';
+import FilterModal from './FilterModal';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { View } from 'react-native-web';
+import db from '../../firebase';
 
-function Lista(props
-){
-  
-  const [query , setquery] = useState(null)
-  const [dataSource , setdataSource] = useState([])
-  const [dataBackup , setdataBackup] = useState([])
-  const [showFilterModal, setShowFilterModal] = useState(false)
-  
+function Lista(props) {
+  const [query, setquery] = useState(null);
+  const [dataSource, setdataSource] = useState([]);
+  const [dataBackup, setdataBackup] = useState([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [data, setData] = useState([]);
 
-  useEffect(()=> {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const collectionRef = db.collection('Objava');
+        const snapshot = await collectionRef.get();
+        const newData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setData(newData);
+        console.log('newData', newData);
+        // console.log('snapshot', snapshot);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+
     let data = [
       {
         id: 1,
-        user: "neko1",
-        tekst1: "Zagreb - Mostar",
-        tekst3: "900KM",
-        tekst2: "10.1.2021",
-        slika: require("../../assets/9.jpg"),
+        user: 'neko1',
+        tekst1: 'Zagreb - Mostar',
+        tekst3: '900KM',
+        tekst2: '10.1.2021',
+        slika: require('../../assets/9.jpg'),
       },
       {
         id: 2,
-        tekst1: "Sarajevo - Beograd",
-        tekst3: "700KM",
-        tekst2: "20.1.2021",
-        slika: require("../../assets/8.jpg"),
+        tekst1: 'Sarajevo - Beograd',
+        tekst3: '700KM',
+        tekst2: '20.1.2021',
+        slika: require('../../assets/8.jpg'),
       },
       {
         id: 3,
-        tekst1: "Beograd - Banja Luka",
-        tekst3: "600KM",
-        tekst2: "3.2.2021",
-        slika: require("../../assets/7.jpg"),
+        tekst1: 'Beograd - Banja Luka',
+        tekst3: '600KM',
+        tekst2: '3.2.2021',
+        slika: require('../../assets/7.jpg'),
       },
       {
         id: 4,
-        tekst1: "Sarajevo - Mostar",
-        tekst3: "400KM",
-        tekst2: "5.3.2021",
-        slika: require("../../assets/6.jpg"),
+        tekst1: 'Sarajevo - Mostar',
+        tekst3: '400KM',
+        tekst2: '5.3.2021',
+        slika: require('../../assets/6.jpg'),
       },
       {
         id: 5,
-        user: "neko1",
-        tekst1: "Sarajevo - Mostar",
-        tekst3: "350KM",
-        tekst2: "5.5.2021",
-        slika: require("../../assets/5.jpg"),
+        user: 'neko1',
+        tekst1: 'Sarajevo - Mostar',
+        tekst3: '350KM',
+        tekst2: '5.5.2021',
+        slika: require('../../assets/5.jpg'),
       },
       {
         id: 6,
-        tekst1: "Sarajevo - Mostar",
-        tekst3: "450KM",
-        tekst2: "10.5.2021",
-        slika: require("../../assets/1.jpg"),
+        tekst1: 'Sarajevo - Mostar',
+        tekst3: '450KM',
+        tekst2: '10.5.2021',
+        slika: require('../../assets/1.jpg'),
       },
       {
         id: 7,
-        user: "neko1",
-        tekst1: "Sarajevo - Mostar",
-        tekst3: "500KM",
-        tekst2: "8.7.2021",
-        slika: require("../../assets/splash.png"),
+        user: 'neko1',
+        tekst1: 'Sarajevo - Mostar',
+        tekst3: '500KM',
+        tekst2: '8.7.2021',
+        slika: require('../../assets/splash.png'),
       },
     ];
 
-   
+    setdataBackup(data);
+    setdataSource(data);
+  }, []);
 
-    setdataBackup(data)
-    setdataSource(data)
-  },[]);
+  function filterItem(tekstZatraziti) {
+    var dat = dataBackup;
 
-  function filterItem(tekstZatraziti){
-
-    var dat = dataBackup
-    
-    setdataSource(dataBackup.filter( i =>
-    i.tekst1.toLowerCase().includes(tekstZatraziti.toLowerCase()))
-    )
-      
-    if(tekstZatraziti == ''){
-
-      setdataSource(dataBackup)
-    }
-
-  };
-
-  
-
-    return (
-
-
-      <SafeAreaView style={styles.ime}>
-
-      {/* Filter screeen */}
-      {showFilterModal &&
-    <FilterModal isVisible={showFilterModal} onClose={ () => setShowFilterModal(false)}></FilterModal>
-       }
-
-       <AppTextimput
-         icon="search"
-         icon2="filter"
-         klik={() => setShowFilterModal(true)}
-          placeholder="pretraga"
-          style={styles.app}
-          onChangeText={(text) => filterItem(text)}
-          
-        >
-          
-        </AppTextimput>
-        
-
-        
-        <FlatList
-          data={dataSource}
-          keyExtractor={(listing) => listing.id.toString()}
-          renderItem={({ item }) => (
-            <AppCard
-              tekst1={item.tekst1}
-              tekst2={item.tekst2}
-              tekst3={item.tekst3}
-              slika={item.slika}
-              onPress={() => props.navigation.navigate("listing", item)}
-            />
-          )}
-          showsVerticalScrollIndicator="false"
-        ></FlatList>
-      </SafeAreaView>
+    setdataSource(
+      dataBackup.filter((i) =>
+        i.tekst1.toLowerCase().includes(tekstZatraziti.toLowerCase())
+      )
     );
+
+    if (tekstZatraziti == '') {
+      setdataSource(dataBackup);
+    }
   }
+
+  return (
+    <SafeAreaView style={styles.ime}>
+      {/* Filter screeen */}
+      {showFilterModal && (
+        <FilterModal
+          isVisible={showFilterModal}
+          onClose={() => setShowFilterModal(false)}
+        ></FilterModal>
+      )}
+
+      <AppTextimput
+        icon="search"
+        icon2="filter"
+        klik={() => setShowFilterModal(true)}
+        placeholder="pretraga"
+        style={styles.app}
+        onChangeText={(text) => filterItem(text)}
+      ></AppTextimput>
+
+      <FlatList
+        data={dataSource}
+        keyExtractor={(listing) => listing.id.toString()}
+        renderItem={({ item }) => (
+          <AppCard
+            tekst1={item.tekst1}
+            tekst2={item.tekst2}
+            tekst3={item.tekst3}
+            slika={item.slika}
+            onPress={() => props.navigation.navigate('listing', item)}
+          />
+        )}
+        showsVerticalScrollIndicator="false"
+      ></FlatList>
+    </SafeAreaView>
+  );
+}
 
 const styles = StyleSheet.create({
   ime: {
     flex: 1,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 1,
       height: 1,
@@ -155,10 +162,10 @@ const styles = StyleSheet.create({
   },
   app: {
     flex: 1,
-    height: "100%",
+    height: '100%',
   },
   AppTextimput: {
-    paddingRight:'28px' 
-  }
+    paddingRight: '28px',
+  },
 });
 export default Lista;
