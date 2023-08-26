@@ -1,41 +1,41 @@
-import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Lista from "./Lista";
-import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { Component } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Lista from './Lista';
+import { createDrawerNavigator, DrawerContent } from '@react-navigation/drawer';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   createStackNavigator,
   HeaderBackButton,
-} from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-import navigacijatema from "../Navigacija/navigacijatema";
-import { Drowercontent } from "../Drawcontent/Drowcontent";
-import Proizvod from "../proizvod";
-import Korisnik2 from '../Korisnik/Korisnik2'
-import ImageInputList from "../Imagepicker/ImageInputList";
-import colors from "../../components/colors/colors";
-import Imagelista from "../Imagepicker/Imagelista";
-import Setings from "../Profil/Setings";
+} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import navigacijatema from '../Navigacija/navigacijatema';
+import { Drowercontent } from '../Drawcontent/Drowcontent';
+import Proizvod from '../proizvod';
+import Korisnik2 from '../Korisnik/Korisnik2';
+import ImageInputList from '../Imagepicker/ImageInputList';
+import colors from '../../components/colors/colors';
+import Imagelista from '../Imagepicker/ImageLista';
+import Setings from '../Profil/Settings';
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Navigacija2 = createStackNavigator();
 const Navigacija3 = createStackNavigator();
 const Homestackscreen = ({ navigation }) => (
-  <Navigacija2.Navigator >
+  <Navigacija2.Navigator>
     <Navigacija2.Screen
       name="Glavni"
       component={Lista}
       cardStyle={{ backgroundColor: colors.primary }}
       options={{
-        headerTitle: "Glavna",
+        headerTitle: 'Glavna',
         headerRight: () => (
           <Ionicons
             name="add-circle-outline"
             color={colors.primary}
             size={30}
             style={{ paddingRight: 10, paddingTop: 5 }}
-            onPress={() => navigation.navigate("Dodaj")}
+            onPress={() => navigation.navigate('Dodaj')}
           />
         ),
         headerLeft: () => (
@@ -51,13 +51,13 @@ const Homestackscreen = ({ navigation }) => (
       }}
     />
     <Navigacija3.Screen name="Dodaj" component={Imagelista} />
-    <Navigacija3.Screen name="Setings" component={Setings}/>
-    <Navigacija3.Screen name="Korisnik" component={Korisnik2}/>
+    <Navigacija3.Screen name="Setings" component={Setings} />
+    <Navigacija3.Screen name="Korisnik" component={Korisnik2} />
     <Navigacija3.Screen name="account" component={Imagelista} />
-    <Navigacija3.Screen 
+    <Navigacija3.Screen
       name="listing"
       component={Proizvod}
-      options={{ headerShown: false , presentation: "modal"}}
+      options={{ headerShown: false, presentation: 'modal' }}
     />
   </Navigacija2.Navigator>
 );
@@ -70,12 +70,11 @@ export class Main extends Component {
 
   render() {
     return (
-      <NavigationContainer theme={navigacijatema }  >
-        <Drawer.Navigator 
+      <NavigationContainer theme={navigacijatema}>
+        <Drawer.Navigator
           drawerContent={(props) => <Drowercontent {...props} />}
           screenOptions={{
-            headerShown: false
-            
+            headerShown: false,
           }}
         >
           <Drawer.Screen name="Main" component={Homestackscreen} />
@@ -90,7 +89,7 @@ export class Main extends Component {
 const styles = StyleSheet.create({
   ime: {
     flex: 1,
-    borderBottomColor: "white",
+    borderBottomColor: 'white',
   },
   pretraga: {
     flex: 1,
