@@ -13,95 +13,37 @@ function Lista(props) {
   const [dataSource, setdataSource] = useState([]);
   const [dataBackup, setdataBackup] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const collectionRef = db.collection('Objava');
+        const collectionRef = db.collection('objava');
         const snapshot = await collectionRef.get();
         const newData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setData(newData);
         console.log('newData', newData);
-        // console.log('snapshot', snapshot);
+        setdataSource(newData);
+        setdataBackup(newData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-
-    let data = [
-      {
-        id: 1,
-        user: 'neko1',
-        tekst1: 'Zagreb - Mostar',
-        tekst3: '900KM',
-        tekst2: '10.1.2021',
-        slika: require('../../assets/9.jpg'),
-      },
-      {
-        id: 2,
-        tekst1: 'Sarajevo - Beograd',
-        tekst3: '700KM',
-        tekst2: '20.1.2021',
-        slika: require('../../assets/8.jpg'),
-      },
-      {
-        id: 3,
-        tekst1: 'Beograd - Banja Luka',
-        tekst3: '600KM',
-        tekst2: '3.2.2021',
-        slika: require('../../assets/7.jpg'),
-      },
-      {
-        id: 4,
-        tekst1: 'Sarajevo - Mostar',
-        tekst3: '400KM',
-        tekst2: '5.3.2021',
-        slika: require('../../assets/6.jpg'),
-      },
-      {
-        id: 5,
-        user: 'neko1',
-        tekst1: 'Sarajevo - Mostar',
-        tekst3: '350KM',
-        tekst2: '5.5.2021',
-        slika: require('../../assets/5.jpg'),
-      },
-      {
-        id: 6,
-        tekst1: 'Sarajevo - Mostar',
-        tekst3: '450KM',
-        tekst2: '10.5.2021',
-        slika: require('../../assets/1.jpg'),
-      },
-      {
-        id: 7,
-        user: 'neko1',
-        tekst1: 'Sarajevo - Mostar',
-        tekst3: '500KM',
-        tekst2: '8.7.2021',
-        slika: require('../../assets/splash.png'),
-      },
-    ];
-
-    setdataBackup(data);
-    setdataSource(data);
   }, []);
 
   function filterItem(tekstZatraziti) {
-    var dat = dataBackup;
+    let dat = dataBackup;
 
     setdataSource(
-      dataBackup.filter((i) =>
-        i.tekst1.toLowerCase().includes(tekstZatraziti.toLowerCase())
+      dataBackup.filter(
+        (i) =>
+          i.startCity.toLowerCase().includes(tekstZatraziti.toLowerCase()) ||
+          i.endCity.toLowerCase().includes(tekstZatraziti.toLowerCase())
       )
     );
-
     if (tekstZatraziti == '') {
       setdataSource(dataBackup);
     }
@@ -131,10 +73,11 @@ function Lista(props) {
         keyExtractor={(listing) => listing.id.toString()}
         renderItem={({ item }) => (
           <AppCard
-            tekst1={item.tekst1}
-            tekst2={item.tekst2}
-            tekst3={item.tekst3}
-            slika={item.slika}
+            startCity={item.startCity}
+            endCity={item.endCity}
+            startDate={item.startDate}
+            slika={item.img}
+            price={item.price}
             onPress={() => props.navigation.navigate('listing', item)}
           />
         )}

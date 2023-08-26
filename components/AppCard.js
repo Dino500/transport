@@ -1,25 +1,34 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   StyleSheet,
   Image,
   Text,
   TouchableWithoutFeedback,
-} from "react-native";
-import AppText from "./AppText";
-import colors from "./colors/colors";
-function AppCard({ tekst1, tekst2, tekst3 = null, slika = null, onPress }) {
+} from 'react-native';
+import AppText from './AppText';
+import colors from './colors/colors';
+function AppCard({
+  startCity,
+  endCity,
+  startDate = null,
+  price,
+  slika,
+  onPress,
+}) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
-        <Image source={slika} style={styles.image}></Image>
+        <Image source={{ uri: slika }} style={styles.image}></Image>
         <View style={styles.tekst}>
           <Text style={styles.font}>Relacija:</Text>
-          <Text style={styles.font}>{tekst1}</Text>
+          <Text style={styles.font}>
+            {startCity} - {endCity}
+          </Text>
           <Text style={styles.font}>Datum:</Text>
-          <Text style={styles.font}>{tekst2}</Text>
+          <Text style={styles.font}>{startDate}</Text>
           <Text style={[styles.font, { paddingTop: 15 }]}>Cijena:</Text>
-          <Text style={[styles.font, { color: "green" }]}>{tekst3}</Text>
+          <Text style={[styles.font, { color: 'green' }]}>{price} KM</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -28,20 +37,20 @@ function AppCard({ tekst1, tekst2, tekst3 = null, slika = null, onPress }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.podloga,
-    alignItems: "center",
+    alignItems: 'center',
 
     marginTop: 10,
     padding: 0,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: 30,
-    flexDirection: "row",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
 
     elevation: 5,
   },
   image: {
-    position: "relative",
-    overflow: "hidden",
+    position: 'relative',
+    overflow: 'hidden',
     marginRight: 10,
     width: 184,
     height: 176,
@@ -53,7 +62,7 @@ const styles = StyleSheet.create({
   },
   font: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: '500',
     padding: 1,
   },
 });
