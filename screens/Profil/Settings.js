@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { View, Image, Alert, Platform } from 'react-native';
-import AppTextimput from '../../components/AppTextimput';
-import AppText from '../../components/AppText';
-import Buttons from '../../components/Button';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from "react";
+import { View, Image, Alert, Platform } from "react-native";
+import AppTextimput from "../../components/AppTextimput";
+import AppText from "../../components/AppText";
+import Buttons from "../../components/Button";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Avatar,
   Title,
@@ -14,35 +14,37 @@ import {
   Switch,
   Text,
   Button,
-} from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native-paper";
+import { Ionicons } from "@expo/vector-icons";
 import {
   backgroundColor,
   borderColor,
-} from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
-import * as ImagePicker from 'expo-image-picker';
+} from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import * as ImagePicker from "expo-image-picker";
 import {
   TextInput,
   TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+} from "react-native-gesture-handler";
 
-import firebase from 'firebase';
+import firebase from "firebase";
 
-import {} from 'firebase/storage';
-import FilterModal from '../Main/FilterModal';
+import {} from "firebase/storage";
+import FilterModal from "../Main/FilterModal";
 
-import colors from '../../components/colors/colors';
+import colors from "../../components/colors/colors";
 
 const Settings = () => {
+  const storage = firebase.default.storage();
+  const storageRef = storage.ref();
   const [image, setImage] = useState(null);
   const [userdata, setuserdata] = useState();
   const [uploading, setuploading] = useState(false);
-  const [urlslike, seturlslike] = useState('');
+  const [urlslike, seturlslike] = useState("");
 
   const getuser = async () => {
     const currentUser = await firebase.default
       .firestore()
-      .collection('users')
+      .collection("users")
       .doc(firebase.default.auth().currentUser.uid)
       .get()
       .then((documentSnapshot) => {
@@ -60,15 +62,15 @@ const Settings = () => {
 
   const requestPermission = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!granted) alert('You need to enable permission to access the library.');
+    if (!granted) alert("You need to enable permission to access the library.");
   };
 
   const handlePress = () => {
     if (!image) selectImage();
     else
-      Alert.alert('Delete', 'Are you sure you want to delete this image?', [
-        { text: 'Yes', onPress: () => setImage(null) },
-        { text: 'No' },
+      Alert.alert("Delete", "Are you sure you want to delete this image?", [
+        { text: "Yes", onPress: () => setImage(null) },
+        { text: "No" },
       ]);
   };
 
@@ -82,71 +84,57 @@ const Settings = () => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.cancelled) {
-        setImage({ uri: result.uri });
+      if (!result.canceled) {
+        console.log(result);
+        setImage(result.assets[0].uri);
+        setuserdata({ ...userdata, slikaurl: result.assets[0].uri });
       } else {
-        console.log('izasao');
+        console.log("izasao");
       }
     } catch (error) {
-      console.log('Error reading an image', error);
+      console.log("Error reading an image", error);
     }
   };
 
-  const Upload = async () => {
-    const { uri } = image;
-    const filename = uri.substring(uri.lastIndexOf('/') + 1);
-    const uploadUri = uri.replace('file://', '');
+  const Upload = async (localImagePath) => {
+    try {
+      const imageRef = storageRef.child(
+        "images/" + new Date().getTime() + ".jpg"
+      );
+      const response = await fetch(localImagePath);
+      const blob = await response.blob();
+      await imageRef.put(blob);
+      const downloadURL = await imageRef.getDownloadURL();
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return null;
+    }
+  };
 
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uploadUri, true);
-      xhr.send(null);
+  const edithandle = async () => {
+    const img = await Upload(image);
+    const collectionRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.default.auth().currentUser.uid);
+
+    collectionRef.update({
+      broj_telefona: userdata.broj_telefona,
+      name: userdata.name,
+      ime: userdata.ime,
+      slikaurl: img,
+      // Convert to integer if necessary
     });
-
-    const ref = firebase.storage().ref().child(filename);
-
-    const snapshot = ref.put(blob);
-
-    snapshot.on(
-      firebase.storage.TaskEvent.STATE_CHANGED,
-      () => {
-        setuploading(true);
-      },
-      (error) => {
-        setuploading(false);
-        console.log(error);
-        blob.close();
-        return;
-      },
-      () => {
-        snapshot.snapshot.ref.getDownloadURL().then((url) => {
-          setuploading(false);
-          console.log(url);
-          blob.close();
-          setuserdata({ ...userdata, nesto: url });
-
-          return url;
-        });
-      }
-    );
   };
 
   return (
     <SafeAreaView style={{ marginHorizontal: 20 }}>
       <View>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: "row" }}>
           <TouchableWithoutFeedback onPress={handlePress}>
             <Avatar.Image
-              source={
-                userdata ? userdata.nesto : require('../../assets/icon.png')
-              }
+              source={{ uri: userdata ? userdata.slikaurl : image }}
               size={100}
             ></Avatar.Image>
 
@@ -155,24 +143,24 @@ const Settings = () => {
                 borderRadius: 100,
                 marginTop: 20,
                 marginLeft: 20,
-                overflow: 'hidden',
-                position: 'absolute',
+                overflow: "hidden",
+                position: "absolute",
               }}
             >
               <Ionicons
                 name="camera-outline"
                 size={50}
-                style={{ opacity: 0.7, padding: 5, backgroundColor: 'gray' }}
+                style={{ opacity: 0.7, padding: 5, backgroundColor: "gray" }}
                 color="white"
               ></Ionicons>
             </View>
           </TouchableWithoutFeedback>
           <View>
             <Title style={{ paddingTop: 20, paddingLeft: 20 }}>
-              {userdata ? userdata.name : ''}
+              {userdata ? userdata.name : ""}
             </Title>
             <Caption style={{ paddingLeft: 20 }}>
-              {userdata ? userdata.email : ''}
+              {userdata ? userdata.email : ""}
             </Caption>
           </View>
         </View>
@@ -181,7 +169,7 @@ const Settings = () => {
         Ime prezime
       </AppText>
       <AppTextimput
-        value={userdata ? userdata.name : ''}
+        value={userdata ? userdata.name : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, name: txt })}
       ></AppTextimput>
 
@@ -189,25 +177,27 @@ const Settings = () => {
         Broj telefona
       </AppText>
       <AppTextimput
-        value={userdata ? userdata.broj_telefona : ''}
+        value={userdata ? userdata.broj_telefona : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, broj_telefona: txt })}
       ></AppTextimput>
       <AppText style={{ paddingTop: 10 }}>Nadimak</AppText>
       <AppTextimput
-        value={userdata ? userdata.ime : ''}
+        value={userdata ? userdata.ime : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, ime: txt })}
       >
         <TextInput></TextInput>
       </AppTextimput>
       <AppText style={{ paddingTop: 10 }}>Lokacija</AppText>
       <AppTextimput
-        value={userdata ? userdata.lokacija : ''}
+        value={userdata ? userdata.lokacija : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, lokacija: txt })}
       ></AppTextimput>
 
-      <Buttons title={'Sačuvaj'} color={'tipkana'}>
-        {' '}
-      </Buttons>
+      <Buttons
+        title={"Sačuvaj"}
+        color={"tipkana"}
+        onpress={edithandle}
+      ></Buttons>
     </SafeAreaView>
   );
 };

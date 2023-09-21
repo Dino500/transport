@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Lista from './Lista';
-import { createDrawerNavigator, DrawerContent } from '@react-navigation/drawer';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { Component } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import Lista from "./Lista";
+import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   createStackNavigator,
   HeaderBackButton,
-} from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import navigacijatema from '../Navigacija/navigacijatema';
-import { Drowercontent } from '../Drawcontent/Drowcontent';
-import Proizvod from '../proizvod';
-import Korisnik2 from '../Korisnik/Korisnik2';
-import ImageInputList from '../Imagepicker/ImageInputList';
-import colors from '../../components/colors/colors';
-import Imagelista from '../Imagepicker/ImageLista';
-import Setings from '../Profil/Settings';
+} from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import navigacijatema from "../Navigacija/navigacijatema";
+import Drowercontent from "../Drawcontent/Drowcontent";
+import Proizvod from "../proizvod";
+import Korisnik2 from "../Korisnik/Korisnik2";
+import ImageInputList from "../Imagepicker/ImageInputList";
+import colors from "../../components/colors/colors";
+import Imagelista from "../Imagepicker/imagelista";
+import Setings from "../Profil/Settings";
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -28,14 +28,14 @@ const Homestackscreen = ({ navigation }) => (
       component={Lista}
       cardStyle={{ backgroundColor: colors.primary }}
       options={{
-        headerTitle: 'Glavna',
+        headerTitle: "Glavna",
         headerRight: () => (
           <Ionicons
             name="add-circle-outline"
             color={colors.primary}
             size={30}
             style={{ paddingRight: 10, paddingTop: 5 }}
-            onPress={() => navigation.navigate('Dodaj')}
+            onPress={() => navigation.navigate("Dodaj")}
           />
         ),
         headerLeft: () => (
@@ -57,7 +57,7 @@ const Homestackscreen = ({ navigation }) => (
     <Navigacija3.Screen
       name="listing"
       component={Proizvod}
-      options={{ headerShown: false, presentation: 'modal' }}
+      options={{ headerShown: false, presentation: "modal" }}
     />
   </Navigacija2.Navigator>
 );
@@ -89,7 +89,7 @@ export class Main extends Component {
 const styles = StyleSheet.create({
   ime: {
     flex: 1,
-    borderBottomColor: 'white',
+    borderBottomColor: "white",
   },
   pretraga: {
     flex: 1,

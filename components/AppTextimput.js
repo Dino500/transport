@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 import {
   TextInput,
@@ -6,12 +6,20 @@ import {
   SafeAreaView,
   View,
   StatusBar,
-} from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import colors from './colors/colors';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { onChange } from 'react-native-reanimated';
-function AppTextimput({ icon, icon2, klik, value, onChange, ...otherprops }) {
+} from "react-native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import colors from "./colors/colors";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { max, onChange } from "react-native-reanimated";
+function AppTextimput({
+  icon,
+  icon2,
+  klik,
+  value,
+  onChange,
+  height1 = 37,
+  ...otherprops
+}) {
   const [tipka, settipka] = useState(false);
 
   useEffect(() => {
@@ -23,7 +31,7 @@ function AppTextimput({ icon, icon2, klik, value, onChange, ...otherprops }) {
 
   return (
     <SafeAreaView style={styles.kako}>
-      <View style={styles.tekst}>
+      <View style={[styles.tekst, { height: height1 }]}>
         <Ionicons name={icon} size={32} color="darkgray" style={styles.icon} />
         <TextInput
           onChangeText={onChange}
@@ -32,10 +40,10 @@ function AppTextimput({ icon, icon2, klik, value, onChange, ...otherprops }) {
           keyboardAppearance="dark"
           onFocus={() => {
             {
-              backgroundColor: 'red';
+              backgroundColor: "red";
             }
           }}
-          style={styles.tek}
+          style={[styles.tek, { height: height1 }]}
           {...otherprops}
         ></TextInput>
         <Ionicons
@@ -53,19 +61,19 @@ const styles = StyleSheet.create({
   tekst: {
     borderRadius: 20,
     backgroundColor: colors.podloga,
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     marginTop: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   icon: {
     margin: 10,
   },
   kako: {
-    backgroundColor: 'rgba(82, 22, 80, 0.0)',
+    backgroundColor: "rgba(82, 22, 80, 0.0)",
     marginBottom: 10,
 
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
 
-    height: '100%',
+    height: "100%",
     paddingLeft: 10,
     color: colors.tamno,
   },

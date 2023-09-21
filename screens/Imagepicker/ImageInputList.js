@@ -1,33 +1,33 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import AppText from '../../components/AppText';
-import ImageInput from './ImageInput';
-import AppTextimput from '../../components/AppTextimput';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useEffect, useRef, useState } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
+import AppText from "../../components/AppText";
+import ImageInput from "./ImageInput";
+import AppTextimput from "../../components/AppTextimput";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import * as firebase from 'firebase/app';
-import 'firebase/storage';
+import * as firebase from "firebase/app";
+import "firebase/storage";
 
-import Button from '../../components/Button';
-import db from '../../firebase';
+import Button from "../../components/Button";
+import db from "../../firebase";
 
 function ImageInputList({ images, onRemoveImage, onAddImage }) {
   const scrollView = useRef();
   const storage = firebase.default.storage();
   const storageRef = storage.ref();
-  const [date, setDate] = useState('');
-  const [endCity, setEndCity] = useState('');
-  const [startCity, setStartCity] = useState('');
-  const [user, setUser] = useState('');
-  const [image, setImage] = useState('');
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState('');
+  const [date, setDate] = useState("");
+  const [endCity, setEndCity] = useState("");
+  const [startCity, setStartCity] = useState("");
+  const [user, setUser] = useState("");
+  const [image, setImage] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
 
   // Function to upload an image
   const uploadImage = async (localImagePath) => {
     try {
       const imageRef = storageRef.child(
-        'images/' + new Date().getTime() + '.jpg'
+        "images/" + new Date().getTime() + ".jpg"
       );
       const response = await fetch(localImagePath);
       const blob = await response.blob();
@@ -35,14 +35,14 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
       const downloadURL = await imageRef.getDownloadURL();
       return downloadURL;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
       return null;
     }
   };
 
   const addDataToFirestore = async () => {
     try {
-      const collectionRef = db.collection('objava');
+      const collectionRef = db.collection("objava");
       const downloadURL = await uploadImage(images[0]);
       // Data to be added
       const newData = {
@@ -58,9 +58,9 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
       // Add the data to the collection
       const docRef = await collectionRef.add(newData);
 
-      console.log('Document added with ID:', docRef.id);
+      console.log("Document added with ID:", docRef.id);
     } catch (error) {
-      console.error('Error adding data:', error);
+      console.error("Error adding data:", error);
     }
   };
 
@@ -78,7 +78,7 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
       >
         <View style={styles.container}>
           {images.map((uri) => (
-            <View key={uri} style={styles.image}>
+            <View key={1} style={styles.image}>
               <ImageInput
                 images={uri}
                 onChangeImage={() => onRemoveImage(uri)}
@@ -100,16 +100,16 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
       <AppTextimput
         value={description}
         onChange={(text) => setDescription(text)}
-        style={{ height: 100 }}
+        height1={100}
       ></AppTextimput>
-      <Button onpress={addDataToFirestore} title={'Potvrdi'}></Button>
+      <Button onpress={addDataToFirestore} title={"Potvrdi"}></Button>
     </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   image: {
     marginRight: 10,

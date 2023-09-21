@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -13,11 +13,9 @@ import colors from "../../components/colors/colors";
 
 let url;
 
-
 function ImageInput({ images, onChangeImage }) {
   const [image, setImage] = useState(null);
 
-  
   useEffect(() => {
     requestPermission();
   }, []);
@@ -30,12 +28,10 @@ function ImageInput({ images, onChangeImage }) {
   const handlePress = () => {
     if (!images) selectImage();
     else
-     Alert.alert("Delete", "Are you sure you want to delete this image?", [
+      Alert.alert("Delete", "Are you sure you want to delete this image?", [
         { text: "Yes", onPress: () => onChangeImage(null) },
         { text: "No" },
-     ]);
-     
-      
+      ]);
   };
 
   const selectImage = async () => {
@@ -44,10 +40,11 @@ function ImageInput({ images, onChangeImage }) {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.cancelled) { onChangeImage(result.uri)}
-  
-      
-      else{console.log("izasao")}
+      if (!result.canceled) {
+        onChangeImage(result.assets[0].uri);
+      } else {
+        console.log("izasao");
+      }
     } catch (error) {
       console.log("Error reading an image", error);
     }
@@ -63,7 +60,7 @@ function ImageInput({ images, onChangeImage }) {
             size={40}
           />
         )}
-       {images && ( <Image source={{ uri: images }} style={styles.image} />)}
+        {images && <Image source={{ uri: images }} style={styles.image} />}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -71,7 +68,6 @@ function ImageInput({ images, onChangeImage }) {
 
 const styles = StyleSheet.create({
   container: {
-    
     alignItems: "center",
     backgroundColor: colors.podloga,
     borderRadius: 15,
@@ -84,7 +80,6 @@ const styles = StyleSheet.create({
   image: {
     height: "100%",
     width: "100%",
-    
   },
 });
 

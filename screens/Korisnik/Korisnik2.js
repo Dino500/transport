@@ -1,21 +1,39 @@
-import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler';
-import AppCard from '../../components/AppCard';
-import {Avatar, Caption, Text, Title} from 'react-native-paper'
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import AppCard from "../../components/AppCard";
+import { Avatar, Caption, Text, Title } from "react-native-paper";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import db from "../../firebase";
 
-import AppCard2 from '../../components/AppCard2';
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
-import AppButton from '../../components/Button';
+import AppCard2 from "../../components/AppCard2";
+import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import AppButton from "../../components/Button";
+import * as firebase from "firebase/app";
 
-function Korisnik({navigation,route}) {
+function Korisnik({ navigation, route }) {
   const linstin = route.params;
-const[dataSource, setdataSource] =useState() ; 
-const[dataBackup, setdataBackup] = useState(); 
-const[leng , setleng] =useState()
+  const [dataSource, setdataSource] = useState();
+  const [dataBackup, setdataBackup] = useState();
+  const [leng, setleng] = useState();
+  const [user, setUser] = useState();
 
-    useEffect(()=> {
-        var data = [
+  const getuser = async () => {
+    const currentUser = await firebase.default
+      .firestore()
+      .collection("users")
+      .doc(firebase.default.auth().currentUser.uid)
+      .get()
+      .then((documentSnapshot) => {
+        if (documentSnapshot.exists) {
+          console.log(documentSnapshot.data());
+          setUser(documentSnapshot.data());
+        }
+      });
+  };
+
+  useEffect(() => {
+    /*  var data = [
           {
             id: 1,
             user: "neko1",
@@ -68,72 +86,99 @@ const[leng , setleng] =useState()
             tekst2: "8.7.2021",
             slika: require("../../assets/splash.png"),
           },
-        ];
-        setdataBackup(data)
-        setdataSource(data);
-        setleng( Object.keys(data).length);
-        console.log(leng)
-      },[]);
+        ]; */
+    const fetchData = async () => {
+      try {
+        const collectionRef = db.collection("objava");
+        const snapshot = await collectionRef
+          .where("userId", "==", firebase.default.auth().currentUser.uid)
+          .get();
+        const newData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
+        setdataSource(newData);
+        setdataBackup(newData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getuser();
+    fetchData();
+  }, []);
 
-
-
+  let date = dataSource;
   return (
     <View>
-       <FlatList
-          data={dataSource}
-          numColumns={2}
-          keyExtractor={(listing) => listing.id.toString()}
-          ListHeaderComponent={<View style={{padding:20, borderBottomWidth:1 , borderBottomColor:"lightgray" , alignItems:"center" ,alignContent:"center" ,alignSelf:"center"}}>
-          <Avatar.Image source={require("../../assets/23.jpg")} size={100}></Avatar.Image>
-          <View  style={{alignItems:"center", paddingTop:10}}>
-  
-          <Title>@korisnik</Title>
-          <View style={{flexDirection:"row"}} >
-          <View style={{alignItems:"center", paddingHorizontal:5}}>
-          <Text style={{fontSize:20}}>{leng}</Text>
-          <Text style={{fontSize:15}}>objava</Text>
-          
+      <FlatList
+        data={dataSource}
+        numColumns={2}
+        keyExtractor={(listing) => listing.id.toString()}
+        ListHeaderComponent={
+          <View
+            style={{
+              padding: 20,
+              borderBottomWidth: 1,
+              borderBottomColor: "lightgray",
+              alignItems: "center",
+              alignContent: "center",
+              alignSelf: "center",
+            }}
+          >
+            <Avatar.Image
+              source={{ uri: user ? user.slikaurl : "" }}
+              size={100}
+            ></Avatar.Image>
+            <View style={{ alignItems: "center", paddingTop: 10 }}>
+              <Title>{user ? user.name : "user"}</Title>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ alignItems: "center", paddingHorizontal: 5 }}>
+                  <Text style={{ fontSize: 20 }}>
+                    {dataSource ? Object.keys(dataSource).length : "2"}
+                  </Text>
+                  <Text style={{ fontSize: 15 }}>objava</Text>
+                </View>
+                <View
+                  style={{
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    borderEndWidth: 1,
+                    borderStartWidth: 1,
+                    paddingHorizontal: 7,
+                    borderColor: "gray",
+                  }}
+                >
+                  <Text style={{ fontSize: 20 }}>{leng}</Text>
+                  <Text style={{ fontSize: 15 }}>Zavrsenih</Text>
+                </View>
+                <View style={{ alignItems: "center", paddingHorizontal: 5 }}>
+                  <Text style={{ fontSize: 20 }}>3</Text>
+                  <Text style={{ fontSize: 15 }}>dojmovi</Text>
+                </View>
+              </View>
+            </View>
+            <AppButton
+              color="tipkana"
+              title={"kontaktiraj"}
+              style={{ paddingTop: 4 }}
+            ></AppButton>
           </View>
-         <View style={{alignItems:"center", paddingHorizontal:5 , borderEndWidth: 1 , borderStartWidth:1 ,  paddingHorizontal:7 ,borderColor:"gray" }}>
-         <Text style={{fontSize:20}}>{leng}</Text>
-          <Text style={{fontSize:15}}>Zavrsenih</Text>
-
-         </View>
-         <View style={{alignItems:"center", paddingHorizontal:5}}>
-         <Text style={{fontSize:20}}>3</Text>
-          <Text style={{fontSize:15}}>dojmovi</Text>
-
-         </View>
-          </View>
-
-          </View>
-          <AppButton color='tipkana' title={"kontaktiraj"} style={{paddingTop:4}}></AppButton>
-        </View>}
-          renderItem={({ item }) => (
-
-
-
-            
-            <AppCard2
-              tekst1={item.tekst1}
-              tekst2={item.tekst2}
-              tekst3={item.tekst3}
-              slika={item.slika}
-              onPress={() => navigation.navigate("listing", item)}
-            />
-          )}
-          showsVerticalScrollIndicator="false"
-        >
-      
-
-        </FlatList>
-       
+        }
+        renderItem={({ item }) => (
+          <AppCard2
+            startCity={item.startCity}
+            endCity={item.endCity}
+            price={item.price}
+            tekst3={item.tekst3}
+            slika={item.img}
+            onPress={() => navigation.navigate("listing", item)}
+          />
+        )}
+        showsVerticalScrollIndicator="false"
+      ></FlatList>
     </View>
-  )
+  );
 }
 
-
-
-
-export default Korisnik
+export default Korisnik;

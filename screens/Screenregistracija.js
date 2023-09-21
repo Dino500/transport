@@ -16,7 +16,7 @@ import AppText from "../components/AppText";
 
 import * as firebase from "firebase/app";
 
-import 'firebase/firestore';
+import "firebase/firestore";
 
 import colors from "../components/colors/colors";
 
@@ -40,7 +40,14 @@ export class Screenregistracija extends Component {
       .firestore()
       .collection("users")
       .doc(firebase.default.auth().currentUser.uid)
-      .set({ email: prop.email, name: prop.name, broj_telefona: "null" , ime: "null" , nesto: "null"});
+      .set({
+        email: prop.email,
+        name: prop.name,
+        broj_telefona: "null",
+        ime: "null",
+        nadimak: "null",
+        slikaurl: "",
+      });
   }
   async sungup(prop) {
     await firebase.default
