@@ -15,7 +15,7 @@ import Korisnik2 from "../Korisnik/Korisnik2";
 import ImageInputList from "../Imagepicker/ImageInputList";
 import colors from "../../components/colors/colors";
 import Imagelista from "../Imagepicker/imagelista";
-import Setings from "../Profil/Settings";
+import Postavke from "../Profil/Settings";
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -35,7 +35,7 @@ const Homestackscreen = ({ navigation }) => (
             color={colors.primary}
             size={30}
             style={{ paddingRight: 10, paddingTop: 5 }}
-            onPress={() => navigation.navigate("Dodaj")}
+            onPress={() => navigation.navigate("account")}
           />
         ),
         headerLeft: () => (
@@ -50,14 +50,15 @@ const Homestackscreen = ({ navigation }) => (
         ),
       }}
     />
-    <Navigacija3.Screen name="Dodaj" component={Imagelista} />
-    <Navigacija3.Screen name="Setings" component={Setings} />
-    <Navigacija3.Screen name="Korisnik" component={Korisnik2} />
+    <Navigacija3.Screen name="Imagelista" component={Imagelista} />
+    <Navigacija3.Screen name="Postavke" component={Postavke} />
+    <Navigacija3.Screen name="Korisnik2" component={Korisnik2} />
     <Navigacija3.Screen name="account" component={Imagelista} />
     <Navigacija3.Screen
       name="listing"
       component={Proizvod}
       options={{ headerShown: false, presentation: "modal" }}
+      screenOptions={{ presentation: "modal" }}
     />
   </Navigacija2.Navigator>
 );
@@ -78,9 +79,9 @@ export class Main extends Component {
           }}
         >
           <Drawer.Screen name="Main" component={Homestackscreen} />
-          <Drawer.Screen name="setingss" component={Setings} />
-          <Drawer.Screen name="korisnikk" component={Korisnik2} />
-          <Drawer.Screen name="list" component={Imagelista} />
+          <Drawer.Screen name="Postavke" component={Postavke} />
+          <Drawer.Screen name="Korisnik2" component={Korisnik2} />
+          <Drawer.Screen name="Imagelista" component={Imagelista} />
         </Drawer.Navigator>
       </NavigationContainer>
     );

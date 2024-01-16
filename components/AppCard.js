@@ -1,13 +1,14 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   StyleSheet,
   Image,
   Text,
   TouchableWithoutFeedback,
-} from 'react-native';
-import AppText from './AppText';
-import colors from './colors/colors';
+} from "react-native";
+import AppText from "./AppText";
+import colors from "./colors/colors";
+import { MaterialIndicator } from "react-native-indicators";
 function AppCard({
   startCity,
   endCity,
@@ -19,7 +20,13 @@ function AppCard({
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
-        <Image source={{ uri: slika }} style={styles.image}></Image>
+        {slika ? (
+          <Image source={{ uri: slika }} style={styles.image}></Image>
+        ) : (
+          <View style={styles.image}>
+            <MaterialIndicator color="gray" />
+          </View>
+        )}
         <View style={styles.tekst}>
           <Text style={styles.font}>Relacija:</Text>
           <Text style={styles.font}>
@@ -28,7 +35,7 @@ function AppCard({
           <Text style={styles.font}>Datum:</Text>
           <Text style={styles.font}>{startDate}</Text>
           <Text style={[styles.font, { paddingTop: 15 }]}>Cijena:</Text>
-          <Text style={[styles.font, { color: 'green' }]}>{price} KM</Text>
+          <Text style={[styles.font, { color: "green" }]}>{price} KM</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -37,20 +44,20 @@ function AppCard({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.podloga,
-    alignItems: 'center',
+    alignItems: "center",
 
     marginTop: 10,
     padding: 0,
-    justifyContent: 'center',
+    justifyContent: "center",
     borderRadius: 30,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "flex-start",
 
     elevation: 5,
   },
   image: {
-    position: 'relative',
-    overflow: 'hidden',
+    position: "relative",
+    overflow: "hidden",
     marginRight: 10,
     width: 184,
     height: 176,
@@ -62,7 +69,7 @@ const styles = StyleSheet.create({
   },
   font: {
     fontSize: 18,
-    fontWeight: '500',
+    fontWeight: "500",
     padding: 1,
   },
 });

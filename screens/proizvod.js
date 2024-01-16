@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text, Linking } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import AppText from "../components/AppText";
 import AppButton from "../components/Button";
 import colors from "../components/colors/colors";
 import Korisnik from "../components/Korisnik";
 import * as firebase from "firebase/app";
+import { useNavigation } from "@react-navigation/native";
 
 function Proizvod({ route, navigation }) {
   const [user, setUser] = useState();
@@ -23,10 +24,18 @@ function Proizvod({ route, navigation }) {
         }
       });
   };
+  const naviagtion = useNavigation();
+
+  naviagtion.setOptions({ presentation: "modal", headerShown: false });
 
   useEffect(() => {
     getuser();
   }, []);
+
+  const pozovi = () => {
+    Linking.openURL("tel: 0603305543");
+    console.log("pozvao");
+  };
 
   const listing = route.params;
   return (
@@ -51,13 +60,14 @@ function Proizvod({ route, navigation }) {
               title={"Kontaktiraj"}
               color="tipkana"
               styleb="50%"
+              onpress={pozovi}
             ></AppButton>
           </View>
           <Korisnik
             slika={user ? user.slikaurl : ""}
             tekst1={user ? user.name : "loadin"}
             tekst2=" 50 objava"
-            onPress={() => navigation.navigate("Korisnik")}
+            onPress={() => navigation.navigate("Korisnik2")}
           ></Korisnik>
           <Text style={styles.font2}>{listing.startDate}</Text>
           <Text style={{ marginTop: 40 }}>Detalji:</Text>

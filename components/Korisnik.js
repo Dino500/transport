@@ -8,7 +8,10 @@ import {
 } from "react-native";
 import AppText from "./AppText";
 import colors from "./colors/colors";
+import { useNavigation } from "@react-navigation/native";
 function Korisnik({ tekst1, tekst2, slika, onPress }) {
+  const navigation = useNavigation();
+  navigation.setOptions({ title: "Postavke", headerShown: true });
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>

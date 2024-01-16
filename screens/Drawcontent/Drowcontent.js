@@ -60,12 +60,21 @@ const Drowercontent = (props) => {
 
         <Drawer.Section style={styles.profil}>
           <Drawer.Item
+            label="Glavna"
+            icon={({ color, size }) => (
+              <Ionicons name="home" color={"gray"} size={20} />
+            )}
+            onPress={() => {
+              props.navigation.navigate("Glavni");
+            }}
+          ></Drawer.Item>
+          <Drawer.Item
             label="Profil"
             icon={({ color, size }) => (
               <Ionicons name="person" color={"gray"} size={20} />
             )}
             onPress={() => {
-              props.navigation.navigate("Korisnik");
+              props.navigation.navigate("Korisnik2");
             }}
           ></Drawer.Item>
         </Drawer.Section>
@@ -75,16 +84,16 @@ const Drowercontent = (props) => {
             <Ionicons name="settings" color={"gray"} size={20} />
           )}
           onPress={() => {
-            props.navigation.navigate("Setings");
+            props.navigation.navigate("Postavke");
           }}
         ></Drawer.Item>
         <Drawer.Item
-          label="Korinik"
+          label="Dodaj"
           icon={({ color, size }) => (
             <Ionicons name="add" color={"gray"} size={20} />
           )}
           onPress={() => {
-            props.navigation.navigate("Dodaj");
+            props.navigation.navigate("Imagelista");
           }}
         ></Drawer.Item>
       </DrawerContentScrollView>

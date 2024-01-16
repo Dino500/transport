@@ -10,6 +10,7 @@ import AppCard2 from "../../components/AppCard2";
 import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import AppButton from "../../components/Button";
 import * as firebase from "firebase/app";
+import { useNavigation } from "@react-navigation/native";
 
 function Korisnik({ navigation, route }) {
   const linstin = route.params;
@@ -17,6 +18,9 @@ function Korisnik({ navigation, route }) {
   const [dataBackup, setdataBackup] = useState();
   const [leng, setleng] = useState();
   const [user, setUser] = useState();
+
+  const naviagtion = useNavigation();
+  navigation.setOptions({ title: "Profil", headerShown: true });
 
   const getuser = async () => {
     const currentUser = await firebase.default
@@ -138,23 +142,6 @@ function Korisnik({ navigation, route }) {
                     {dataSource ? Object.keys(dataSource).length : "2"}
                   </Text>
                   <Text style={{ fontSize: 15 }}>objava</Text>
-                </View>
-                <View
-                  style={{
-                    alignItems: "center",
-                    paddingHorizontal: 5,
-                    borderEndWidth: 1,
-                    borderStartWidth: 1,
-                    paddingHorizontal: 7,
-                    borderColor: "gray",
-                  }}
-                >
-                  <Text style={{ fontSize: 20 }}>{leng}</Text>
-                  <Text style={{ fontSize: 15 }}>Zavrsenih</Text>
-                </View>
-                <View style={{ alignItems: "center", paddingHorizontal: 5 }}>
-                  <Text style={{ fontSize: 20 }}>3</Text>
-                  <Text style={{ fontSize: 15 }}>dojmovi</Text>
                 </View>
               </View>
             </View>

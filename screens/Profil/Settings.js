@@ -32,14 +32,19 @@ import {} from "firebase/storage";
 import FilterModal from "../Main/FilterModal";
 
 import colors from "../../components/colors/colors";
+import { useNavigation } from "@react-navigation/native";
 
-const Settings = () => {
+const Postavke = () => {
   const storage = firebase.default.storage();
   const storageRef = storage.ref();
   const [image, setImage] = useState(null);
   const [userdata, setuserdata] = useState();
   const [uploading, setuploading] = useState(false);
   const [urlslike, seturlslike] = useState("");
+
+  const naviagtion = useNavigation();
+
+  naviagtion.setOptions({ title: "Postavke", headerShown: true });
 
   const getuser = async () => {
     const currentUser = await firebase.default
@@ -202,4 +207,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Postavke;

@@ -1,11 +1,16 @@
 import React, { Component, useState, useEffect } from "react";
-import { FlatList, SafeAreaView, StyleSheet } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  RefreshControl,
+} from "react-native";
 import { event } from "react-native-reanimated";
 import AppCard from "../../components//AppCard";
 import AppTextimput from "../../components/AppTextimput";
 import FilterModal from "./FilterModal";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { View } from "react-native-web";
+
 import db from "../../firebase";
 
 function Lista(props) {
@@ -13,26 +18,27 @@ function Lista(props) {
   const [dataSource, setdataSource] = useState([]);
   const [dataBackup, setdataBackup] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const collectionRef = db.collection("objava");
-        const snapshot = await collectionRef.get();
-        const newData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log("newData", newData);
-        setdataSource(newData);
-        setdataBackup(newData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const collectionRef = db.collection("objava");
+      const snapshot = await collectionRef.get();
+      const newData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      console.log("newData", newData);
+      setdataSource(newData);
+      setdataBackup(newData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   function filterItem(tekstZatraziti) {
     let dat = dataBackup;
@@ -83,6 +89,13 @@ function Lista(props) {
           />
         )}
         showsVerticalScrollIndicator="false"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={fetchData}
+            tintColor={"cyan"}
+          />
+        }
       ></FlatList>
     </SafeAreaView>
   );
