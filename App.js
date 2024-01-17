@@ -22,11 +22,6 @@ import {
 import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
 
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import rootReducer from "./Store/Reducers/Index";
-import thunk from "redux-thunk";
-const store = createStore(rootReducer, applyMiddleware(thunk));
 
 import Loginscreen from "./screens/loginscreen";
 import Screenlogin from "./screens/Screenlogin";
@@ -39,8 +34,11 @@ import AppButton from "./components/Button";
 import navigacijatema from "./screens/Navigacija/navigacijatema";
 import Proizvod from "./screens/proizvod";
 import { Drowercontent } from "./screens/Drawcontent/Drowcontent";
-
+import { StoreProvider, createStore } from "easy-peasy";
+import model from "./components/Store/Store.js";
 const Navigacija = createStackNavigator();
+
+const store = createStore(model);
 
 export class App extends Component {
   constructor(props) {
@@ -116,10 +114,9 @@ export class App extends Component {
       );
     }
     return (
-      <Provider store={store}>
+      <StoreProvider store={store}>
         <Main />
-      </Provider>
-    );
+      </StoreProvider>);
   }
 }
 

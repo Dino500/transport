@@ -2,30 +2,16 @@ import {
   View,
   Text,
   Animated,
-  ScrollView,
   TouchableWithoutFeedback,
   Modal,
-  TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import RangeSlider, { Slider } from "react-native-range-slider-expo";
+import { Ionicons } from "@expo/vector-icons";
+import RangeSlider from "react-native-range-slider-expo";
 
-import colorts from "../../components/colors/colors";
 import Button from "../../components/Button";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
-import { render } from "react-dom";
-import {
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  TouchableRipple,
-  Switch,
-  Chip,
-} from "react-native-paper";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 const FilterModal = ({ isVisible, onClose }) => {
   const [showFilterModal, setFilterModal] = useState(isVisible);
@@ -34,7 +20,9 @@ const FilterModal = ({ isVisible, onClose }) => {
   const [fromValue, setFromValue] = useState(0);
   const [toValue, setToValue] = useState(1000);
   const [value, setValue] = useState(0);
-
+  const filter = useStoreState((state) => state.filter)
+  const aktivacija = useStoreActions((actions) => actions.setactiv)
+  const range = useStoreState((state) => state.range)
   const Section = ({ title }) => {
     return (
       <View
@@ -59,17 +47,25 @@ const FilterModal = ({ isVisible, onClose }) => {
         <RangeSlider
           min={min}
           max={max}
-          initialFromValue={500}
-          fromValueOnChange={(value) => setFromValue(value)}
+          fromValueOnChange={(value) => { setFromValue(value) }}
           toValueOnChange={(value) => setToValue(value)}
         ></RangeSlider>
       </View>
     );
   }
 
+  const aktiviraj = () => {
+    setFilterModal(false);
+
+    aktivacija({ to: toValue, from: fromValue });
+
+  }
   // {Animacije otvaranje i zatvaranje pretrage}
 
   useEffect(() => {
+
+    console.log(range);
+
     if (showFilterModal) {
       Animated.timing(animacija, {
         toValue: 1,
@@ -153,7 +149,7 @@ const FilterModal = ({ isVisible, onClose }) => {
 
           <View style={{ height: 150 }}>
             {/* {Prvi slider za udaljenost} */}
-            {slideri("Cijena", 1000, 0)}
+            {slideri("Cijena", range.to, range.from)}
           </View>
           <View style={{ height: 170 }}></View>
 
@@ -161,7 +157,7 @@ const FilterModal = ({ isVisible, onClose }) => {
             <Button
               color="primary"
               title={"Potvrdi"}
-              onpress={() => setFilterModal(false)}
+              onpress={aktiviraj}
             ></Button>
           </View>
         </Animated.View>

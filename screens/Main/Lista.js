@@ -12,6 +12,7 @@ import FilterModal from "./FilterModal";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import db from "../../firebase";
+import { action, useStoreActions } from "easy-peasy";
 
 function Lista(props) {
   const [query, setquery] = useState(null);
@@ -19,9 +20,14 @@ function Lista(props) {
   const [dataBackup, setdataBackup] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const setfilter = useStoreActions((action) => action.setFilter)
+
+  const setRange = useStoreActions((action) => action.setRange);
+  const fromto = { to: "", from: "" };
 
   useEffect(() => {
     fetchData();
+
   }, []);
 
   const fetchData = async () => {
@@ -35,6 +41,11 @@ function Lista(props) {
       console.log("newData", newData);
       setdataSource(newData);
       setdataBackup(newData);
+      console.log(Math.max(...newData.map(o => o.price)))
+      fromto.to = Math.max(...newData.map(o => o.price));
+
+      fromto.from = Math.min(...newData.map(o => o.price));
+      setRange(fromto);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
