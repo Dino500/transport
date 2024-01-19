@@ -40,7 +40,7 @@ const Homestackscreen = ({ navigation }) => (
         ),
         headerLeft: () => (
           <Ionicons.Button
-            name="person-circle-outline"
+            name="ios-menu"
             color={colors.primary}
             size={30}
             backgroundColor="white"
@@ -67,7 +67,7 @@ const Detailstackscreen = ({ navigation }) => (
 );
 
 export class Main extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     return (

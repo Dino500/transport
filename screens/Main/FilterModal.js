@@ -23,6 +23,7 @@ const FilterModal = ({ isVisible, onClose }) => {
   const filter = useStoreState((state) => state.filter)
   const aktivacija = useStoreActions((actions) => actions.setactiv)
   const range = useStoreState((state) => state.range)
+  const obrisifilter = useStoreActions((action) => action.deleteFilter)
   const Section = ({ title }) => {
     return (
       <View
@@ -45,6 +46,8 @@ const FilterModal = ({ isVisible, onClose }) => {
           </Text>
         </View>
         <RangeSlider
+          initialToValue={filter.to}
+          initialFromValue={filter.from}
           min={min}
           max={max}
           fromValueOnChange={(value) => { setFromValue(value) }}
@@ -55,16 +58,17 @@ const FilterModal = ({ isVisible, onClose }) => {
   }
 
   const aktiviraj = () => {
+    aktivacija({ to: toValue, from: fromValue });
     setFilterModal(false);
 
-    aktivacija({ to: toValue, from: fromValue });
 
   }
   // {Animacije otvaranje i zatvaranje pretrage}
 
   useEffect(() => {
 
-    console.log(range);
+    setFromValue(range.from);
+    setToValue(range.to);
 
     if (showFilterModal) {
       Animated.timing(animacija, {
@@ -80,6 +84,11 @@ const FilterModal = ({ isVisible, onClose }) => {
       }).start(() => onClose());
     }
   }, [showFilterModal]);
+  const obrisi = () => {
+
+    obrisifilter();
+    setFilterModal(false);
+  }
 
   const modalY = animacija.interpolate({
     inputRange: [0, 1],
@@ -154,11 +163,12 @@ const FilterModal = ({ isVisible, onClose }) => {
           <View style={{ height: 170 }}></View>
 
           <View style={{ paddingTop: 20 }}>
-            <Button
+            {filter.aktivan ? <Button color="tipkana" title={"Obriši filter"} onpress={obrisi}> </Button> : <Button
               color="primary"
               title={"Potvrdi"}
               onpress={aktiviraj}
-            ></Button>
+            ></Button>}
+
           </View>
         </Animated.View>
       </View>

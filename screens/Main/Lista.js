@@ -5,14 +5,12 @@ import {
   StyleSheet,
   RefreshControl,
 } from "react-native";
-import { event } from "react-native-reanimated";
 import AppCard from "../../components//AppCard";
 import AppTextimput from "../../components/AppTextimput";
 import FilterModal from "./FilterModal";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import db from "../../firebase";
-import { action, useStoreActions } from "easy-peasy";
+import { action, useStoreActions, useStoreState } from "easy-peasy";
 
 function Lista(props) {
   const [query, setquery] = useState(null);
@@ -22,13 +20,34 @@ function Lista(props) {
   const [refreshing, setRefreshing] = useState(false);
   const setfilter = useStoreActions((action) => action.setFilter)
 
+
+  const filter = useStoreState((state) => state.filter);
   const setRange = useStoreActions((action) => action.setRange);
   const fromto = { to: "", from: "" };
+  let dat
 
   useEffect(() => {
     fetchData();
-
   }, []);
+
+  useEffect(() => {
+
+    if (filter.aktivan) {
+
+
+      console.log(filter);
+      setdataSource(
+        dataBackup.filter((i) =>
+          parseInt(i.price, 10) >= filter.from && parseInt(i.price, 10) <= filter.to
+        )
+
+      )
+      setdataBackup(dataSource);
+    }
+    else {
+      fetchData();
+    }
+  }, [showFilterModal])
 
   const fetchData = async () => {
     try {
@@ -44,6 +63,8 @@ function Lista(props) {
       console.log(Math.max(...newData.map(o => o.price)))
       fromto.to = Math.max(...newData.map(o => o.price));
 
+
+      console.log(filter);
       fromto.from = Math.min(...newData.map(o => o.price));
       setRange(fromto);
     } catch (error) {
@@ -52,7 +73,7 @@ function Lista(props) {
   };
 
   function filterItem(tekstZatraziti) {
-    let dat = dataBackup;
+    dat = dataBackup;
 
     setdataSource(
       dataBackup.filter(

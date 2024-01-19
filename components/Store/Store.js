@@ -19,6 +19,7 @@ export default {
   }),
 
   setactiv: action((state, payload) => {
+    console.log(payload);
     state.filter.from = payload.from;
     state.filter.to = payload.to;
     state.filter.aktivan = true;
@@ -27,9 +28,10 @@ export default {
   deaktiviraj: action((state, payload) => {
     state.filter.aktivan = false;
   }),
-  deleteFiler: action((state) => {
+  deleteFilter: action((state) => {
     state.filter.from = null;
     state.filter.to = null;
+    state.filter.aktivan = false;
   })
 
   ,
