@@ -20,7 +20,10 @@ function AppCard2({
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
-        <Image source={{ uri: slika }} style={styles.image}></Image>
+        <Image
+          source={slika ? { uri: slika } : null}
+          style={styles.image}
+        ></Image>
         <View style={styles.tekst}>
           <Text style={styles.font}>
             {startCity}- {endCity}

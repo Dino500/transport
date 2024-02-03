@@ -6,8 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
 } from "react-native";
-import AppText from "./AppText";
-import colors from "./colors/colors";
+
 import { useNavigation } from "@react-navigation/native";
 function Korisnik({ tekst1, tekst2, slika, onPress }) {
   const navigation = useNavigation();
@@ -15,7 +14,10 @@ function Korisnik({ tekst1, tekst2, slika, onPress }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
-        <Image source={{ uri: slika }} style={styles.slika}></Image>
+        <Image
+          source={slika ? { uri: slika } : null}
+          style={styles.slika}
+        ></Image>
         <View style={styles.tekst}>
           <Text style={styles.font1}>{tekst1}</Text>
 

@@ -5,24 +5,27 @@ import AppText from "../components/AppText";
 import AppButton from "../components/Button";
 import colors from "../components/colors/colors";
 import Korisnik from "../components/Korisnik";
-import * as firebase from "firebase/app";
+import firestore, { doc, getDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import { db } from "../firebase";
 
 function Proizvod({ route, navigation }) {
   const [user, setUser] = useState();
 
   const getuser = async () => {
-    const currentUser = await firebase.default
-      .firestore()
-      .collection("users")
-      .doc(listing.userId)
-      .get()
-      .then((documentSnapshot) => {
-        if (documentSnapshot.exists) {
-          console.log(documentSnapshot.data());
-          setUser(documentSnapshot.data());
-        }
-      });
+    try {
+      const collectionRef = doc(db, "users", route.params.userId);
+
+      const snapshot = await getDoc(collectionRef);
+
+      const newData = { id: snapshot.id, ...snapshot.data() };
+
+      console.log(newData);
+      setUser(newData);
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      throw error;
+    }
   };
   const naviagtion = useNavigation();
 
@@ -35,6 +38,24 @@ function Proizvod({ route, navigation }) {
   const pozovi = () => {
     Linking.openURL("tel: 0603305543");
     console.log("pozvao");
+  };
+
+  const getDate = (timestamp) => {
+    const milliseconds =
+      timestamp.seconds * 1000 + Math.round(timestamp.nanoseconds / 1e6);
+
+    const dateObject = new Date(milliseconds);
+
+    function formatDateToDDMMYYYY(inputDate) {
+      const date = new Date(inputDate);
+      const day = String(date.getUTCDate()).padStart(2, "0");
+      const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Months are zero-based
+      const year = date.getUTCFullYear();
+
+      return `${day}-${month}-${year}`;
+    }
+
+    return formatDateToDDMMYYYY(dateObject);
   };
 
   const listing = route.params;
@@ -67,9 +88,10 @@ function Proizvod({ route, navigation }) {
             slika={user ? user.slikaurl : ""}
             tekst1={user ? user.name : "loadin"}
             tekst2=" 50 objava"
-            onPress={() => navigation.navigate("Korisnik2")}
+            onPress={() => navigation.navigate("Korisnik2", listing)}
           ></Korisnik>
-          <Text style={styles.font2}>{listing.startDate}</Text>
+          <Text style={{ marginTop: 40 }}>Datum polaska:</Text>
+          <Text style={styles.font2}>{getDate(listing.startDate)}</Text>
           <Text style={{ marginTop: 40 }}>Detalji:</Text>
           <View style={styles.detalji}>
             <Text style={{ margin: 20 }}>{listing.description}</Text>

@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "./colors/colors";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { max, onChange } from "react-native-reanimated";
+
 function AppTextimput({
   icon,
   icon2,

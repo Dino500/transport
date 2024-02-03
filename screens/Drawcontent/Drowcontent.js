@@ -1,36 +1,29 @@
 import { View, StyleSheet } from "react-native";
-import * as firebase from "firebase/app";
-import firestore from "firebase/firestore";
-import React, { Component, useEffect, useState } from "react";
-import {
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  TouchableRipple,
-  Switch,
-  Text,
-} from "react-native-paper";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase.js";
+
+import React, { useEffect, useState } from "react";
+import { Avatar, Title, Caption, Drawer } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
 
 const Drowercontent = (props) => {
   const [user, setUser] = useState();
 
   const getuser = async () => {
-    const currentUser = await firebase.default
-      .firestore()
-      .collection("users")
-      .doc(firebase.default.auth().currentUser.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (documentSnapshot.exists) {
-          console.log(documentSnapshot.data());
-          setUser(documentSnapshot.data());
-        }
-      });
+    try {
+      const collectionRef = doc(db, "users", auth.currentUser.uid);
+
+      const snapshot = await getDoc(collectionRef);
+
+      const newData = { id: snapshot.id, ...snapshot.data() };
+
+      console.log(newData);
+      setUser(newData);
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -53,7 +46,7 @@ const Drowercontent = (props) => {
             </View>
             <View style={{ marginLeft: 20 }}>
               <Title>{user ? user.name : "loading"}</Title>
-              <Caption>{firebase.default.auth().currentUser.email}</Caption>
+              <Caption>{auth.currentUser.email}</Caption>
             </View>
           </View>
         </View>
@@ -109,7 +102,7 @@ const Drowercontent = (props) => {
             />
           )}
           onPress={() => {
-            firebase.default.auth().signOut();
+            auth.signOut();
           }}
         ></Drawer.Item>
       </Drawer.Section>

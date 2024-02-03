@@ -21,7 +21,10 @@ function AppCard({
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
         {slika ? (
-          <Image source={{ uri: slika }} style={styles.image}></Image>
+          <Image
+            source={slika ? { uri: slika } : null}
+            style={styles.image}
+          ></Image>
         ) : (
           <View style={styles.image}>
             <MaterialIndicator color="gray" />

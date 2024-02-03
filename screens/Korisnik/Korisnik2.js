@@ -3,17 +3,24 @@ import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import AppCard from "../../components/AppCard";
 import { Avatar, Caption, Text, Title } from "react-native-paper";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import db from "../../firebase";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  getDoc,
+  doc,
+} from "firebase/firestore";
+import { db, auth } from "../../firebase";
 
 import AppCard2 from "../../components/AppCard2";
 import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import AppButton from "../../components/Button";
-import * as firebase from "firebase/app";
+
 import { useNavigation } from "@react-navigation/native";
 
 function Korisnik({ navigation, route }) {
-  const linstin = route.params;
+  const listing = route.params;
   const [dataSource, setdataSource] = useState();
   const [dataBackup, setdataBackup] = useState();
   const [leng, setleng] = useState();
@@ -23,91 +30,48 @@ function Korisnik({ navigation, route }) {
   navigation.setOptions({ title: "Profil", headerShown: true });
 
   const getuser = async () => {
-    const currentUser = await firebase.default
-      .firestore()
-      .collection("users")
-      .doc(firebase.default.auth().currentUser.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (documentSnapshot.exists) {
-          console.log(documentSnapshot.data());
-          setUser(documentSnapshot.data());
-        }
-      });
+    try {
+      const collectionRef = doc(
+        db,
+        "users",
+        listing ? listing.userId : auth.currentUser.uid
+      );
+
+      const snapshot = await getDoc(collectionRef);
+
+      const newData = { id: snapshot.id, ...snapshot.data() };
+
+      console.log(newData);
+      setUser(newData);
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      throw error;
+    }
+  };
+  const fetchData = async () => {
+    try {
+      const collectionRef = collection(db, "objava");
+
+      const q = query(
+        collectionRef,
+        where("userId", "==", auth.currentUser.uid)
+      );
+      const snapshot = await getDocs(q);
+
+      const newData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      console.log(newData);
+      setdataSource(newData);
+      setdataBackup(newData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
-    /*  var data = [
-          {
-            id: 1,
-            user: "neko1",
-            tekst1: "Zagreb - Mostar",
-            tekst3: "900KM",
-            tekst2: "10.1.2021",
-            slika: require("../../assets/9.jpg"),
-          },
-          {
-            id: 2,
-            tekst1: "Sarajevo - Beograd",
-            tekst3: "700KM",
-            tekst2: "20.1.2021",
-            slika: require("../../assets/8.jpg"),
-          },
-          {
-            id: 3,
-            tekst1: "Beograd - Banja Luka",
-            tekst3: "600KM",
-            tekst2: "3.2.2021",
-            slika: require("../../assets/7.jpg"),
-          },
-          {
-            id: 4,
-            tekst1: "Sarajevo - Mostar",
-            tekst3: "400KM",
-            tekst2: "5.3.2021",
-            slika: require("../../assets/6.jpg"),
-          },
-          {
-            id: 5,
-            user: "neko1",
-            tekst1: "Sarajevo - Mostar",
-            tekst3: "350KM",
-            tekst2: "5.5.2021",
-            slika: require("../../assets/5.jpg"),
-          },
-          {
-            id: 6,
-            tekst1: "Sarajevo - Mostar",
-            tekst3: "450KM",
-            tekst2: "10.5.2021",
-            slika: require("../../assets/1.jpg"),
-          },
-          {
-            id: 7,
-            user: "neko1",
-            tekst1: "Sarajevo - Mostar",
-            tekst3: "500KM",
-            tekst2: "8.7.2021",
-            slika: require("../../assets/splash.png"),
-          },
-        ]; */
-    const fetchData = async () => {
-      try {
-        const collectionRef = db.collection("objava");
-        const snapshot = await collectionRef
-          .where("userId", "==", firebase.default.auth().currentUser.uid)
-          .get();
-        const newData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setdataSource(newData);
-        setdataBackup(newData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     getuser();
     fetchData();
   }, []);

@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Button,
-  View,
-  StyleSheet,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  Keyboard,
-} from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -15,17 +7,19 @@ import AppTextImput from "../components/AppTextimput";
 import AppButton from "../components/Button";
 import AppText from "../components/AppText";
 
-import firebase from "firebase";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase.js";
 import colors from "../components/colors/colors";
 const validation = Yup.object().shape({
   email: Yup.string().email().required().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
 });
 const handleSubmit = async (lisnigs) => {
-  const result = await firebase
-    .auth()
-    .signInWithEmailAndPassword(lisnigs.email, lisnigs.password)
+  const result = await signInWithEmailAndPassword(
+    auth,
+    lisnigs.email,
+    lisnigs.password
+  )
     .then((result) => {
       if (!result.user) {
         alert("Uspjesno");
@@ -59,6 +53,7 @@ function Screenlogin(props) {
                   returnKeyType="go"
                   returnKeyLabel="go"
                   onChangeText={handleChange("email")}
+                  height1={50}
                 />
                 <AppText style={{ color: colors.tipkana }}>
                   {errors.email}
@@ -69,12 +64,13 @@ function Screenlogin(props) {
                   secureTextEntry
                   placeholder="Password"
                   onChangeText={handleChange("password")}
+                  height1={50}
                 />
                 <AppText style={{ color: colors.tipkana }}>
                   {errors.password}
                 </AppText>
                 <AppButton
-                  title="Uloguj se"
+                  title="Prijavi se"
                   style={styles.kut}
                   onpress={handleSubmit}
                 />
@@ -95,6 +91,9 @@ const styles = StyleSheet.create({
   },
   va1: {
     width: "95%",
+  },
+  text: {
+    height: "150px",
   },
 });
 export default Screenlogin;

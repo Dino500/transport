@@ -12,10 +12,9 @@ import navigacijatema from "../Navigacija/navigacijatema";
 import Drowercontent from "../Drawcontent/Drowcontent";
 import Proizvod from "../proizvod";
 import Korisnik2 from "../Korisnik/Korisnik2";
-import ImageInputList from "../Imagepicker/ImageInputList";
 import colors from "../../components/colors/colors";
 import Imagelista from "../Imagepicker/imagelista";
-import Postavke from "../Profil/Settings";
+import Settings from "../Profil/Settings";
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -40,7 +39,7 @@ const Homestackscreen = ({ navigation }) => (
         ),
         headerLeft: () => (
           <Ionicons.Button
-            name="ios-menu"
+            name="menu-outline"
             color={colors.primary}
             size={30}
             backgroundColor="white"
@@ -51,7 +50,7 @@ const Homestackscreen = ({ navigation }) => (
       }}
     />
     <Navigacija3.Screen name="Imagelista" component={Imagelista} />
-    <Navigacija3.Screen name="Postavke" component={Postavke} />
+    <Navigacija3.Screen name="Postavke" component={Settings} />
     <Navigacija3.Screen name="Korisnik2" component={Korisnik2} />
     <Navigacija3.Screen name="account" component={Imagelista} />
     <Navigacija3.Screen
@@ -67,7 +66,7 @@ const Detailstackscreen = ({ navigation }) => (
 );
 
 export class Main extends Component {
-  componentDidMount() { }
+  componentDidMount() {}
 
   render() {
     return (
@@ -79,9 +78,9 @@ export class Main extends Component {
           }}
         >
           <Drawer.Screen name="Main" component={Homestackscreen} />
-          <Drawer.Screen name="Postavke" component={Postavke} />
+          {/*   <Drawer.Screen name="Postavke" component={Postavke} />
           <Drawer.Screen name="Korisnik2" component={Korisnik2} />
-          <Drawer.Screen name="Imagelista" component={Imagelista} />
+          <Drawer.Screen name="Imagelista" component={Imagelista} /> */}
         </Drawer.Navigator>
       </NavigationContainer>
     );

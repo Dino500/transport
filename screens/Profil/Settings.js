@@ -16,59 +16,52 @@ import {
   Button,
 } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  backgroundColor,
-  borderColor,
-} from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+
 import * as ImagePicker from "expo-image-picker";
 import {
   TextInput,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 
-import firebase from "firebase";
+import { getApp } from "firebase/app";
+import firestore, { getDoc, doc, collection, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import {} from "firebase/storage";
-import FilterModal from "../Main/FilterModal";
-
-import colors from "../../components/colors/colors";
 import { useNavigation } from "@react-navigation/native";
 
 const Postavke = () => {
-  const storage = firebase.default.storage();
-  const storageRef = storage.ref();
   const [image, setImage] = useState(null);
   const [userdata, setuserdata] = useState();
   const [uploading, setuploading] = useState(false);
   const [urlslike, seturlslike] = useState("");
-
   const naviagtion = useNavigation();
-
   naviagtion.setOptions({ title: "Postavke", headerShown: true });
 
   const getuser = async () => {
-    const currentUser = await firebase.default
-      .firestore()
-      .collection("users")
-      .doc(firebase.default.auth().currentUser.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (documentSnapshot.exists) {
-          console.log(documentSnapshot.data());
-          setuserdata(documentSnapshot.data());
-        }
-      });
+    try {
+      const collectionRef = doc(db, "users", auth.currentUser.uid);
+
+      const snapshot = await getDoc(collectionRef);
+
+      const newData = { id: snapshot.id, ...snapshot.data() };
+
+      console.log(newData);
+      setuserdata(newData);
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      throw error;
+    }
   };
 
   useEffect(() => {
-    requestPermission();
     getuser();
   }, []);
 
-  const requestPermission = async () => {
+  /* const requestPermission = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) alert("You need to enable permission to access the library.");
-  };
+  }; */
 
   const handlePress = () => {
     if (!image) selectImage();
@@ -78,10 +71,6 @@ const Postavke = () => {
         { text: "No" },
       ]);
   };
-
-  useEffect(() => {
-    console.log(image);
-  }, [image]);
 
   const selectImage = async () => {
     try {
@@ -103,13 +92,15 @@ const Postavke = () => {
 
   const Upload = async (localImagePath) => {
     try {
-      const imageRef = storageRef.child(
-        "images/" + new Date().getTime() + ".jpg"
-      );
+      const storage = getStorage(app);
+
+      const imageRef = ref(storage, "images/" + new Date().getTime() + ".jpg");
       const response = await fetch(localImagePath);
       const blob = await response.blob();
-      await imageRef.put(blob);
-      const downloadURL = await imageRef.getDownloadURL();
+
+      await uploadBytes(imageRef, blob);
+
+      const downloadURL = await getDownloadURL(imageRef);
       return downloadURL;
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -119,12 +110,9 @@ const Postavke = () => {
 
   const edithandle = async () => {
     const img = await Upload(image);
-    const collectionRef = firebase
-      .firestore()
-      .collection("users")
-      .doc(firebase.default.auth().currentUser.uid);
+    const collectionRef = doc(db, "users", auth.currentUser.uid);
 
-    collectionRef.update({
+    await setDoc(collectionRef, {
       broj_telefona: userdata.broj_telefona,
       name: userdata.name,
       ime: userdata.ime,
@@ -134,7 +122,7 @@ const Postavke = () => {
   };
 
   return (
-    <SafeAreaView style={{ marginHorizontal: 20 }}>
+    <View>
       <View>
         <View style={{ flexDirection: "row" }}>
           <TouchableWithoutFeedback onPress={handlePress}>
@@ -189,9 +177,7 @@ const Postavke = () => {
       <AppTextimput
         value={userdata ? userdata.ime : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, ime: txt })}
-      >
-        <TextInput></TextInput>
-      </AppTextimput>
+      ></AppTextimput>
       <AppText style={{ paddingTop: 10 }}>Lokacija</AppText>
       <AppTextimput
         value={userdata ? userdata.lokacija : ""}
@@ -203,7 +189,7 @@ const Postavke = () => {
         color={"tipkana"}
         onpress={edithandle}
       ></Buttons>
-    </SafeAreaView>
+    </View>
   );
 };
 

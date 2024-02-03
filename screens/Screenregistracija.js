@@ -6,17 +6,17 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedbackBase,
+  Platform,
 } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+
 import AppTextimput from "../components/AppTextimput";
 import AppButton from "../components/Button";
 import { ErrorMessage, Formik } from "formik";
 import * as Yup from "yup";
 import AppText from "../components/AppText";
 
-import * as firebase from "firebase/app";
-
-import "firebase/firestore";
+import firestore from "firebase/firestore";
+import { auth } from "../firebase.js";
 
 import colors from "../components/colors/colors";
 
@@ -36,23 +36,18 @@ const validation = Yup.object().shape({
 
 export class Screenregistracija extends Component {
   async spapi(prop) {
-    await firebase.default
-      .firestore()
-      .collection("users")
-      .doc(firebase.default.auth().currentUser.uid)
-      .set({
-        email: prop.email,
-        name: prop.name,
-        broj_telefona: "null",
-        ime: "null",
-        nadimak: "null",
-        slikaurl: "",
-      });
+    await firestore.collection("users").doc(auth.currentUser.uid).set({
+      email: prop.email,
+      name: prop.name,
+      broj_telefona: "null",
+      ime: "null",
+      nadimak: "null",
+      slikaurl: "",
+    });
   }
   async sungup(prop) {
-    await firebase.default
-      .auth()
-      .createUserWithEmailAndPassword(prop.email, prop.password)
+    await auth
+      .createUserWithEmailAndPassword(auth, prop.email, prop.password)
       .then((result) => {
         if (!result.user) {
           alert("Uspjesno");
@@ -88,6 +83,7 @@ export class Screenregistracija extends Component {
                     autoCapitalize="none"
                     autoCompleteType="email"
                     autoCorrect={false}
+                    height1={50}
                   />
                   <AppText style={{ color: colors.tipkana }}>
                     {errors.email}
@@ -97,6 +93,7 @@ export class Screenregistracija extends Component {
                     placeholder="Korisnicko ime i prezime"
                     onChangeText={handleChange("name")}
                     autoCapitalize="none"
+                    height1={50}
                   />
                   <AppText style={{ color: colors.tipkana }}>
                     {errors.name}
@@ -107,6 +104,7 @@ export class Screenregistracija extends Component {
                     secureTextEntry
                     onChangeText={handleChange("password")}
                     autoCapitalize="none"
+                    height1={50}
                   />
                   <AppText style={{ color: colors.tipkana }}>
                     {errors.password}

@@ -9,7 +9,9 @@ import AppCard from "../../components//AppCard";
 import AppTextimput from "../../components/AppTextimput";
 import FilterModal from "./FilterModal";
 
-import db from "../../firebase";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { app } from "../../firebase";
+
 import { action, useStoreActions, useStoreState } from "easy-peasy";
 
 function Lista(props) {
@@ -18,54 +20,51 @@ function Lista(props) {
   const [dataBackup, setdataBackup] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const setfilter = useStoreActions((action) => action.setFilter)
-
+  const setfilter = useStoreActions((action) => action.setFilter);
 
   const filter = useStoreState((state) => state.filter);
   const setRange = useStoreActions((action) => action.setRange);
   const fromto = { to: "", from: "" };
-  let dat
+  let dat;
 
   useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-
     if (filter.aktivan) {
-
-
       console.log(filter);
       setdataSource(
-        dataBackup.filter((i) =>
-          parseInt(i.price, 10) >= filter.from && parseInt(i.price, 10) <= filter.to
+        dataBackup.filter(
+          (i) =>
+            parseInt(i.price, 10) >= filter.from &&
+            parseInt(i.price, 10) <= filter.to
         )
-
-      )
+      );
       setdataBackup(dataSource);
-    }
-    else {
+    } else {
       fetchData();
     }
-  }, [showFilterModal])
+  }, [showFilterModal]);
 
   const fetchData = async () => {
     try {
-      const collectionRef = db.collection("objava");
-      const snapshot = await collectionRef.get();
+      const firestore = getFirestore(app);
+
+      const collectionRef = collection(firestore, "objava");
+
+      const snapshot = await getDocs(collectionRef);
       const newData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("newData", newData);
+      console.log(newData[0].startDate);
       setdataSource(newData);
       setdataBackup(newData);
-      console.log(Math.max(...newData.map(o => o.price)))
-      fromto.to = Math.max(...newData.map(o => o.price));
 
+      fromto.to = Math.max(...newData.map((o) => o.price));
 
-      console.log(filter);
-      fromto.from = Math.min(...newData.map(o => o.price));
+      fromto.from = Math.min(...newData.map((o) => o.price));
       setRange(fromto);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -86,6 +85,24 @@ function Lista(props) {
       setdataSource(dataBackup);
     }
   }
+
+  const getDate = (timestamp) => {
+    const milliseconds =
+      timestamp.seconds * 1000 + Math.round(timestamp.nanoseconds / 1e6);
+
+    const dateObject = new Date(milliseconds);
+
+    function formatDateToDDMMYYYY(inputDate) {
+      const date = new Date(inputDate);
+      const day = String(date.getUTCDate()).padStart(2, "0");
+      const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Months are zero-based
+      const year = date.getUTCFullYear();
+
+      return `${day}-${month}-${year}`;
+    }
+
+    return formatDateToDDMMYYYY(dateObject);
+  };
 
   return (
     <SafeAreaView style={styles.ime}>
@@ -114,7 +131,7 @@ function Lista(props) {
           <AppCard
             startCity={item.startCity}
             endCity={item.endCity}
-            startDate={item.startDate}
+            startDate={getDate(item.startDate)}
             slika={item.img}
             price={item.price}
             onPress={() => props.navigation.navigate("listing", item)}

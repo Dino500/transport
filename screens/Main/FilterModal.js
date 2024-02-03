@@ -12,18 +12,27 @@ import RangeSlider from "react-native-range-slider-expo";
 
 import Button from "../../components/Button";
 import { useStoreActions, useStoreState } from "easy-peasy";
+import DateTimePicker from "react-native-ui-datepicker";
+import colors from "../../components/colors/colors";
+import { ScrollView } from "react-native-gesture-handler";
 
 const FilterModal = ({ isVisible, onClose }) => {
   const [showFilterModal, setFilterModal] = useState(isVisible);
+  const [dates, setDates] = useState();
+
+  const [ranges, setRanges] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
   const animacija = useRef(new Animated.Value(0)).current;
   const [fromValue, setFromValue] = useState(0);
   const [toValue, setToValue] = useState(1000);
   const [value, setValue] = useState(0);
-  const filter = useStoreState((state) => state.filter)
-  const aktivacija = useStoreActions((actions) => actions.setactiv)
-  const range = useStoreState((state) => state.range)
-  const obrisifilter = useStoreActions((action) => action.deleteFilter)
+  const filter = useStoreState((state) => state.filter);
+  const aktivacija = useStoreActions((actions) => actions.setactiv);
+  const range = useStoreState((state) => state.range);
+  const obrisifilter = useStoreActions((action) => action.deleteFilter);
   const Section = ({ title }) => {
     return (
       <View
@@ -48,9 +57,13 @@ const FilterModal = ({ isVisible, onClose }) => {
         <RangeSlider
           initialToValue={filter.to}
           initialFromValue={filter.from}
+          fromKnobColor={colors.tipkana}
+          toKnobColor={colors.tipkana}
           min={min}
           max={max}
-          fromValueOnChange={(value) => { setFromValue(value) }}
+          fromValueOnChange={(value) => {
+            setFromValue(value);
+          }}
           toValueOnChange={(value) => setToValue(value)}
         ></RangeSlider>
       </View>
@@ -60,13 +73,10 @@ const FilterModal = ({ isVisible, onClose }) => {
   const aktiviraj = () => {
     aktivacija({ to: toValue, from: fromValue });
     setFilterModal(false);
-
-
-  }
+  };
   // {Animacije otvaranje i zatvaranje pretrage}
 
   useEffect(() => {
-
     setFromValue(range.from);
     setToValue(range.to);
 
@@ -85,15 +95,24 @@ const FilterModal = ({ isVisible, onClose }) => {
     }
   }, [showFilterModal]);
   const obrisi = () => {
-
     obrisifilter();
     setFilterModal(false);
-  }
+  };
 
   const modalY = animacija.interpolate({
     inputRange: [0, 1],
     outputRange: [useWindowDimensions().height, 100],
   });
+
+  const onDateChange = (params) => {
+    let newdate = new Date(params.date);
+    newdate.setUTCHours(0, 0, 0, 0);
+    newdate.setUTCDate(newdate.getUTCDate() + 1);
+
+    // setDates(newdate.setHours(selectedDate.getHours() + 1));
+    console.log(newdate);
+    setDates(newdate);
+  };
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
@@ -129,47 +148,70 @@ const FilterModal = ({ isVisible, onClose }) => {
           }}
         >
           {/* Naslov pretrage section */}
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Text
+
+          <ScrollView>
+            <View
               style={{
-                flex: 1,
-                fontSize: 18,
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              Filtriraj pretragu
-            </Text>
-            <Ionicons
-              name={"close"}
-              size={32}
-              color="darkgray"
-              onPress={() => setFilterModal(false)}
-              style={{
-                borderWidth: 2,
-                borderColor: "lightgray",
-                borderRadius: 10,
-              }}
+              <Text
+                style={{
+                  flex: 1,
+                  fontSize: 18,
+                }}
+              >
+                Filtriraj pretragu
+              </Text>
+              <Ionicons
+                name={"close"}
+                size={32}
+                color="darkgray"
+                onPress={() => setFilterModal(false)}
+                style={{
+                  borderWidth: 2,
+                  borderColor: "lightgray",
+                  borderRadius: 10,
+                }}
+              />
+            </View>
+
+            <View style={{ height: 150 }}>
+              {/* {Prvi slider za udaljenost} */}
+              {slideri("Cijena", range.to, range.from)}
+            </View>
+
+            <DateTimePicker
+              onChange={(params) =>
+                setRanges({
+                  startDate: params.startDate,
+                  endDate: params.endDate,
+                })
+              }
+              date={ranges}
+              selectedItemColor={colors.tipkana}
+              mode="range"
             />
-          </View>
 
-          <View style={{ height: 150 }}>
-            {/* {Prvi slider za udaljenost} */}
-            {slideri("Cijena", range.to, range.from)}
-          </View>
-          <View style={{ height: 170 }}></View>
-
-          <View style={{ paddingTop: 20 }}>
-            {filter.aktivan ? <Button color="tipkana" title={"Obriši filter"} onpress={obrisi}> </Button> : <Button
-              color="primary"
-              title={"Potvrdi"}
-              onpress={aktiviraj}
-            ></Button>}
-
-          </View>
+            <View style={{ paddingTop: 20 }}>
+              {filter.aktivan ? (
+                <Button
+                  color="tipkana"
+                  title={"Obriši filter"}
+                  onpress={obrisi}
+                >
+                  {" "}
+                </Button>
+              ) : (
+                <Button
+                  color="primary"
+                  title={"Potvrdi"}
+                  onpress={aktiviraj}
+                ></Button>
+              )}
+            </View>
+          </ScrollView>
         </Animated.View>
       </View>
     </Modal>
