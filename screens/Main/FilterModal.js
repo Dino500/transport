@@ -18,7 +18,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const FilterModal = ({ isVisible, onClose }) => {
   const [showFilterModal, setFilterModal] = useState(isVisible);
-  const [dates, setDates] = useState();
+  const [dates, setDates] = useState(null);
 
   const [ranges, setRanges] = useState({
     startDate: new Date(),
@@ -71,7 +71,12 @@ const FilterModal = ({ isVisible, onClose }) => {
   }
 
   const aktiviraj = () => {
-    aktivacija({ to: toValue, from: fromValue });
+    aktivacija({
+      to: toValue,
+      from: fromValue,
+      dateFrom: ranges.startDate,
+      dateTo: ranges.endDate,
+    });
     setFilterModal(false);
   };
   // {Animacije otvaranje i zatvaranje pretrage}
@@ -99,6 +104,10 @@ const FilterModal = ({ isVisible, onClose }) => {
     setFilterModal(false);
   };
 
+  useEffect(() => {
+    console.log(ranges);
+  }, [ranges]);
+
   const modalY = animacija.interpolate({
     inputRange: [0, 1],
     outputRange: [useWindowDimensions().height, 100],
@@ -112,6 +121,10 @@ const FilterModal = ({ isVisible, onClose }) => {
     // setDates(newdate.setHours(selectedDate.getHours() + 1));
     console.log(newdate);
     setDates(newdate);
+  };
+
+  const datum = (param) => {
+    console.log(param);
   };
 
   return (
@@ -189,7 +202,8 @@ const FilterModal = ({ isVisible, onClose }) => {
                   endDate: params.endDate,
                 })
               }
-              date={ranges}
+              startDate={ranges.startDate}
+              endDate={ranges.endDate}
               selectedItemColor={colors.tipkana}
               mode="range"
             />

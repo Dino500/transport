@@ -61,13 +61,13 @@ function Proizvod({ route, navigation }) {
   const listing = route.params;
   return (
     <View style={styles.card}>
-      <Image source={{ uri: listing.img }} style={styles.image}></Image>
-
       <ScrollView
         style={styles.tekst}
         bounces="true"
         showsVerticalScrollIndicator="false"
       >
+        <Image source={{ uri: listing.img }} style={styles.image}></Image>
+
         <View style={styles.proi}>
           <Text style={styles.font}>{listing.tekst1}</Text>
 

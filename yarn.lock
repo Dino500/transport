@@ -6581,10 +6581,10 @@ react-native-paper-dates@^0.21.8:
   dependencies:
     color "^3.2.1"
 
-react-native-paper@^4.11.2:
-  version "4.11.2"
-  resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-4.11.2.tgz"
-  integrity sha512-r+M5unY9Avez4we/RijVh4iy8gqxK93R4840aZmbakOJLIuxjfNh3B6SuoxBEbR6diuPRbKVeWHKju4mhltxWw==
+react-native-paper@^4.12.6:
+  version "4.12.6"
+  resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-4.12.6.tgz"
+  integrity sha512-Re1zmz0SYtuKDJVze1gZYACC62ypdVHObApk2Rl6Pfz8Zx34xYFPHWvY3qh/ErtsVFmBhZi0SFwm+arSylUmfg==
   dependencies:
     "@callstack/react-theme-provider" "^3.0.7"
     color "^3.1.2"

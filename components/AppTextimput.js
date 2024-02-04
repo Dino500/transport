@@ -44,6 +44,7 @@ function AppTextimput({
           }}
           style={[styles.tek, { height: height1 }]}
           {...otherprops}
+          
         ></TextInput>
         <Ionicons
           name={icon2}

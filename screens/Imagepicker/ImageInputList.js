@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Modal,
+  SafeAreaView,
+} from "react-native";
 import AppText from "../../components/AppText";
 import ImageInput from "./ImageInput";
 import AppTextimput from "../../components/AppTextimput";
@@ -7,7 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import Button from "../../components/Button";
+import Buttons from "../../components/Button";
 import { app, auth, db } from "../../firebase";
 
 import { Firestore, Timestamp, addDoc, collection } from "firebase/firestore";
@@ -16,18 +22,21 @@ import { useNavigation } from "@react-navigation/native";
 
 import DateTimePicker from "react-native-ui-datepicker";
 import colors from "../../components/colors/colors";
+import { Button } from "react-native-paper";
 
 function ImageInputList({ images, onRemoveImage, onAddImage }) {
   const scrollView = useRef();
 
   const storageRef = null;
-  const [dates, setDates] = useState(new Date());
+  const [dates, setDates] = useState();
   const [endCity, setEndCity] = useState("");
   const [startCity, setStartCity] = useState("");
   const [user, setUser] = useState("");
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+
   const [selectedDate, setSelectedDate] = useState("");
   const navigation = useNavigation();
   // Function to upload an image
@@ -86,7 +95,27 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
     setDates(newdate);
   };
 
+  function formatDateToDDMMYYYY(inputDate) {
+    if (inputDate == null) {
+      return "Dodaj Datum";
+    }
+    const date = new Date(inputDate);
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const year = date.getUTCFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
   // Call the function to add data
+
+  const onClose = () => {
+    setIsVisible(false);
+  };
+
+  const onOpen = () => {
+    setIsVisible(true);
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -122,11 +151,63 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
       />
       <AppText style={{ paddingTop: 10 }}>Datum Polaska</AppText>
 
-      <DateTimePicker
-        onChange={(params) => onDateChange(params)}
-        date={dates}
-        selectedItemColor={colors.tipkana}
-      />
+      <AppTextimput
+        onPressIn={onOpen}
+        icon2={"calendar-outline"}
+        height1={50}
+        value={formatDateToDDMMYYYY(dates)}
+        editable={false}
+        selectTextOnFocus={false}
+      ></AppTextimput>
+
+      <Modal transparent animationType="fade" visible={isVisible}>
+        <SafeAreaView
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 1000,
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+          }}
+          onStartShouldSetResponder={onClose}
+        >
+          <View style={styles.modal}>
+            <View>
+              <AppText style={{ margin: 10 }}>Datum Polaska</AppText>
+              <DateTimePicker
+                onChange={(params) => onDateChange(params)}
+                date={dates}
+                selectedItemColor={colors.tipkana}
+              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  margin: 10,
+                }}
+              >
+                <Button
+                  title="Sacuvja"
+                  mode="contained"
+                  onPress={onClose}
+                  color={colors.tipkana}
+                  style={{ marginRight: 10 }}
+                >
+                  Sačuvja
+                </Button>
+                <Button
+                  title="Zatvori"
+                  mode="outlined"
+                  onPress={onClose}
+                  color={colors.tanmacrna}
+                >
+                  Zatvori
+                </Button>
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
 
       <AppText style={{ paddingTop: 10 }}>Detalji objave</AppText>
       <AppTextimput
@@ -134,7 +215,7 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
         onChange={(text) => setDescription(text)}
         height1={100}
       ></AppTextimput>
-      <Button onpress={addDataToFirestore} title={"Potvrdi"}></Button>
+      <Buttons onpress={addDataToFirestore} title={"Potvrdi"}></Buttons>
 
       <></>
     </KeyboardAwareScrollView>
@@ -144,6 +225,22 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+  },
+  modal: {
+    marginBottom: 200,
+    width: 330,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 10,
+    /* shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 50,
+
+    elevation: 2, */
   },
   image: {
     marginRight: 10,

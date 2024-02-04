@@ -122,7 +122,7 @@ const Postavke = () => {
   };
 
   return (
-    <View>
+    <View style={{ paddingTop: 15, paddingHorizontal: 15 }}>
       <View>
         <View style={{ flexDirection: "row" }}>
           <TouchableWithoutFeedback onPress={handlePress}>

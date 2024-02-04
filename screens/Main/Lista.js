@@ -42,6 +42,16 @@ function Lista(props) {
         )
       );
       setdataBackup(dataSource);
+      if (filter.dateFrom && filter.dateTo) {
+        setdataSource(
+          dataBackup.filter(
+            (i) =>
+              toMillis(i.startDate) >= Date.parse(filter.dateFrom) &&
+              toMillis(i.startDate) <= Date.parse(filter.dateTo)
+          )
+        );
+        setdataBackup(dataSource);
+      }
     } else {
       fetchData();
     }
@@ -102,6 +112,13 @@ function Lista(props) {
     }
 
     return formatDateToDDMMYYYY(dateObject);
+  };
+
+  const toMillis = (timestamp) => {
+    const milliseconds =
+      timestamp.seconds * 1000 + Math.round(timestamp.nanoseconds / 1e6);
+
+    return milliseconds;
   };
 
   return (
