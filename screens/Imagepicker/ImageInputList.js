@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import AppText from "../../components/AppText";
 import ImageInput from "./ImageInput";
-import AppTextInput from "../../components/AppTextInput";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -24,6 +24,7 @@ import DateTimePicker from "react-native-ui-datepicker";
 import colors from "../../components/colors/colors";
 import { Button, TextInput } from "react-native-paper";
 import Toast from "react-native-toast-message";
+import AppTextInput from "../../components/AppTextInput";
 
 function ImageInputList({ images, onRemoveImage, onAddImage }) {
   const scrollView = useRef();

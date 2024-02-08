@@ -3,7 +3,7 @@ import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import AppTextInput from "../components/AppTextInput";
+import AppTextInput from "../components/AppTextInput.js";
 import AppButton from "../components/Button";
 import AppText from "../components/AppText";
 

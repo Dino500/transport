@@ -3,6 +3,7 @@ import { auth } from "./firebase.js";
 import React, { Component, useEffect } from "react";
 import {
   Alert,
+  LogBox,
   SafeAreaView,
   Settings,
   StyleSheet,
@@ -41,6 +42,8 @@ export class App extends Component {
   }
 
   componentDidMount() {
+    LogBox.ignoreAllLogs();
+    LogBox.ignoreLogs(["Warning: ..."]);
     auth.onAuthStateChanged((user) => {
       if (!user) {
         this.setState({

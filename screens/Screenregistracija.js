@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 
-import AppTextInput from "../components/AppTextInput";
+import AppTextInput from "../components/AppTextInput.js";
 import AppButton from "../components/Button";
 import { ErrorMessage, Formik } from "formik";
 import * as Yup from "yup";
