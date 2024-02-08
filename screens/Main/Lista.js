@@ -6,7 +6,7 @@ import {
   RefreshControl,
 } from "react-native";
 import AppCard from "../../components//AppCard";
-import AppTextimput from "../../components/AppTextimput";
+import AppTextInput from "../../components/AppTextInput";
 import FilterModal from "./FilterModal";
 
 import { getFirestore, collection, getDocs } from "firebase/firestore";
@@ -34,23 +34,22 @@ function Lista(props) {
   useEffect(() => {
     if (filter.aktivan) {
       console.log(filter);
-      setdataSource(
-        dataBackup.filter(
-          (i) =>
-            parseInt(i.price, 10) >= filter.from &&
-            parseInt(i.price, 10) <= filter.to
-        )
+
+      const nesto = dataBackup.filter(
+        (i) =>
+          parseInt(i.price, 10) >= filter.from &&
+          parseInt(i.price, 10) <= filter.to
       );
-      setdataBackup(dataSource);
+
       if (filter.dateFrom && filter.dateTo) {
-        setdataSource(
-          dataBackup.filter(
-            (i) =>
-              toMillis(i.startDate) >= Date.parse(filter.dateFrom) &&
-              toMillis(i.startDate) <= Date.parse(filter.dateTo)
-          )
+        nesto.filter(
+          (i) =>
+            toMillis(i.startDate) >= Date.parse(filter.dateFrom) &&
+            toMillis(i.startDate) <= Date.parse(filter.dateTo)
         );
-        setdataBackup(dataSource);
+
+        setdataBackup(nesto);
+        setdataSource(nesto);
       }
     } else {
       fetchData();
@@ -131,7 +130,7 @@ function Lista(props) {
         ></FilterModal>
       )}
 
-      <AppTextimput
+      <AppTextInput
         icon="search"
         icon2="filter"
         klik={() => setShowFilterModal(true)}
@@ -139,7 +138,7 @@ function Lista(props) {
         style={styles.app}
         onChangeText={(text) => filterItem(text)}
         height1={50}
-      ></AppTextimput>
+      ></AppTextInput>
 
       <FlatList
         data={dataSource}
@@ -187,7 +186,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
   },
-  AppTextimput: {
+  AppTextInput: {
     paddingRight: "28px",
   },
 });

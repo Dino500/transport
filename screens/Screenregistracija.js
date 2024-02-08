@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 
-import AppTextimput from "../components/AppTextimput";
+import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/Button";
 import { ErrorMessage, Formik } from "formik";
 import * as Yup from "yup";
@@ -76,7 +76,7 @@ export class Screenregistracija extends Component {
             >
               {({ handleChange, handleSubmit, errors }) => (
                 <>
-                  <AppTextimput
+                  <AppTextInput
                     icon="mail"
                     placeholder="Mail"
                     onChangeText={handleChange("email")}
@@ -88,7 +88,7 @@ export class Screenregistracija extends Component {
                   <AppText style={{ color: colors.tipkana }}>
                     {errors.email}
                   </AppText>
-                  <AppTextimput
+                  <AppTextInput
                     icon="person"
                     placeholder="Korisnicko ime i prezime"
                     onChangeText={handleChange("name")}
@@ -98,7 +98,7 @@ export class Screenregistracija extends Component {
                   <AppText style={{ color: colors.tipkana }}>
                     {errors.name}
                   </AppText>
-                  <AppTextimput
+                  <AppTextInput
                     icon="key"
                     placeholder="Lozinka"
                     secureTextEntry

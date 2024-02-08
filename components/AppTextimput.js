@@ -10,13 +10,14 @@ import {
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "./colors/colors";
 
-function AppTextimput({
+function AppTextInput({
   icon,
   icon2,
   klik,
   value,
   onChange,
   height1 = 37,
+  placeholder,
   ...otherprops
 }) {
   const [tipka, settipka] = useState(false);
@@ -37,6 +38,8 @@ function AppTextimput({
           value={value}
           keyboardType="email-address"
           keyboardAppearance="dark"
+          placeholder={placeholder}
+          placeholderTextColor={"darkgray"}
           onFocus={() => {
             {
               backgroundColor: "red";
@@ -44,7 +47,6 @@ function AppTextimput({
           }}
           style={[styles.tek, { height: height1 }]}
           {...otherprops}
-          
         ></TextInput>
         <Ionicons
           name={icon2}
@@ -92,4 +94,4 @@ const styles = StyleSheet.create({
     color: colors.tamno,
   },
 });
-export default AppTextimput;
+export default AppTextInput;

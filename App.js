@@ -27,6 +27,7 @@ import navigacijatema from "./screens/Navigacija/navigacijatema";
 
 import { StoreProvider, createStore } from "easy-peasy";
 import model from "./components/Store/Store.js";
+import Toast from "react-native-toast-message";
 const Navigacija = createStackNavigator();
 
 const store = createStore(model);
@@ -107,6 +108,7 @@ export class App extends Component {
     return (
       <StoreProvider store={store}>
         <Main />
+        <Toast position="bottom" />
       </StoreProvider>
     );
   }

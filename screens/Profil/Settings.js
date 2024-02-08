@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Image, Alert, Platform } from "react-native";
-import AppTextimput from "../../components/AppTextimput";
+import AppTextInput from "../../components/AppTextInput";
 import AppText from "../../components/AppText";
 import Buttons from "../../components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -161,28 +161,28 @@ const Postavke = () => {
       <AppText style={{ paddingTop: 10 }} maxLength={10} keyboardType="numeric">
         Ime prezime
       </AppText>
-      <AppTextimput
+      <AppTextInput
         value={userdata ? userdata.name : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, name: txt })}
-      ></AppTextimput>
+      ></AppTextInput>
 
       <AppText style={{ paddingTop: 10 }} maxLength={10} keyboardType="numeric">
         Broj telefona
       </AppText>
-      <AppTextimput
+      <AppTextInput
         value={userdata ? userdata.broj_telefona : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, broj_telefona: txt })}
-      ></AppTextimput>
+      ></AppTextInput>
       <AppText style={{ paddingTop: 10 }}>Nadimak</AppText>
-      <AppTextimput
+      <AppTextInput
         value={userdata ? userdata.ime : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, ime: txt })}
-      ></AppTextimput>
+      ></AppTextInput>
       <AppText style={{ paddingTop: 10 }}>Lokacija</AppText>
-      <AppTextimput
+      <AppTextInput
         value={userdata ? userdata.lokacija : ""}
         onChangeText={(txt) => setuserdata({ ...userdata, lokacija: txt })}
-      ></AppTextimput>
+      ></AppTextInput>
 
       <Buttons
         title={"Sačuvaj"}

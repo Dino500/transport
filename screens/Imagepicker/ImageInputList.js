@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import AppText from "../../components/AppText";
 import ImageInput from "./ImageInput";
-import AppTextimput from "../../components/AppTextimput";
+import AppTextInput from "../../components/AppTextInput";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -22,14 +22,15 @@ import { useNavigation } from "@react-navigation/native";
 
 import DateTimePicker from "react-native-ui-datepicker";
 import colors from "../../components/colors/colors";
-import { Button } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
+import Toast from "react-native-toast-message";
 
 function ImageInputList({ images, onRemoveImage, onAddImage }) {
   const scrollView = useRef();
 
   const storageRef = null;
   const [dates, setDates] = useState();
-  const [endCity, setEndCity] = useState("");
+  const [endCity, setEndCity] = useState();
   const [startCity, setStartCity] = useState("");
   const [user, setUser] = useState("");
   const [image, setImage] = useState("");
@@ -76,6 +77,10 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
 
       // Add the data to the collection
       const docRef = await addDoc(collectionRef, newData);
+      Toast.show({
+        type: "success",
+        text1: "Uspješno poslan upit",
+      });
 
       console.log("Document added with ID:", docRef.id);
     } catch (error) {
@@ -97,7 +102,7 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
 
   function formatDateToDDMMYYYY(inputDate) {
     if (inputDate == null) {
-      return "Dodaj Datum";
+      return "";
     }
     const date = new Date(inputDate);
     const day = String(date.getUTCDate()).padStart(2, "0");
@@ -140,25 +145,28 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
         </View>
       </ScrollView>
       <AppText style={{ paddingTop: 20 }}>Polazni grad</AppText>
-      <AppTextimput value={startCity} onChange={(text) => setStartCity(text)} />
+      <AppTextInput value={startCity} onChange={(text) => setStartCity(text)} />
       <AppText style={{ paddingTop: 20 }}>Dolazni grad</AppText>
-      <AppTextimput value={endCity} onChange={(text) => setEndCity(text)} />
+      <AppTextInput value={endCity} onChange={(text) => setEndCity(text)} />
       <AppText style={{ paddingTop: 10 }}>Cijena</AppText>
-      <AppTextimput
+      <AppTextInput
         value={price}
         onChange={(text) => setPrice(text)}
         keyboardType="decimal-pad"
+        placeholder=""
       />
-      <AppText style={{ paddingTop: 10 }}>Datum Polaska</AppText>
+      <AppText style={{ paddingTop: 10 }}>Datum polaska</AppText>
 
-      <AppTextimput
+      <AppTextInput
         onPressIn={onOpen}
         icon2={"calendar-outline"}
         height1={50}
         value={formatDateToDDMMYYYY(dates)}
         editable={false}
         selectTextOnFocus={false}
-      ></AppTextimput>
+        placeholder={"Dodaj datum"}
+        klik={() => {}}
+      ></AppTextInput>
 
       <Modal transparent animationType="fade" visible={isVisible}>
         <SafeAreaView
@@ -187,13 +195,13 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
                 }}
               >
                 <Button
-                  title="Sacuvja"
+                  title="Sačuvaj"
                   mode="contained"
                   onPress={onClose}
                   color={colors.tipkana}
                   style={{ marginRight: 10 }}
                 >
-                  Sačuvja
+                  Sačuvaj
                 </Button>
                 <Button
                   title="Zatvori"
@@ -210,11 +218,11 @@ function ImageInputList({ images, onRemoveImage, onAddImage }) {
       </Modal>
 
       <AppText style={{ paddingTop: 10 }}>Detalji objave</AppText>
-      <AppTextimput
+      <AppTextInput
         value={description}
         onChange={(text) => setDescription(text)}
         height1={100}
-      ></AppTextimput>
+      ></AppTextInput>
       <Buttons onpress={addDataToFirestore} title={"Potvrdi"}></Buttons>
 
       <></>

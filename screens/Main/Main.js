@@ -15,6 +15,7 @@ import Korisnik2 from "../Korisnik/Korisnik2";
 import colors from "../../components/colors/colors";
 import Imagelista from "../Imagepicker/imagelista";
 import Settings from "../Profil/Settings";
+import Upit from "../Upit/Upit";
 
 const Navigacija = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -56,8 +57,13 @@ const Homestackscreen = ({ navigation }) => (
     <Navigacija3.Screen
       name="listing"
       component={Proizvod}
-      options={{ headerShown: false, presentation: "modal" }}
+      options={{ headerTitle: "Detalji transporta", presentation: "modal" }}
       screenOptions={{ presentation: "modal" }}
+    />
+    <Navigacija3.Screen
+      name="Upit"
+      component={Upit}
+      options={{ headerBackTitle: "    " }}
     />
   </Navigacija2.Navigator>
 );

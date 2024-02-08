@@ -3,7 +3,7 @@ import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import AppTextImput from "../components/AppTextimput";
+import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/Button";
 import AppText from "../components/AppText";
 
@@ -11,8 +11,11 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.js";
 import colors from "../components/colors/colors";
 const validation = Yup.object().shape({
-  email: Yup.string().email().required().label("Email"),
-  password: Yup.string().required().min(8).label("Password"),
+  email: Yup.string().email().required("Obavezno polje Email").label("Email"),
+  password: Yup.string()
+    .required("Obavezno polje Šifra")
+    .min(8)
+    .label("Password"),
 });
 const handleSubmit = async (lisnigs) => {
   const result = await signInWithEmailAndPassword(
@@ -44,9 +47,10 @@ function Screenlogin(props) {
           >
             {({ handleChange, handleSubmit, errors }) => (
               <>
-                <AppTextImput
+                <AppText style={{ paddingTop: 10 }}>Email</AppText>
+                <AppTextInput
                   icon="person"
-                  placeholder="Ukucajte vas Email"
+                  placeholder="primjer@email.com"
                   autoCompleteType="password"
                   autoCapitalize="none"
                   keyboardAppearance="dark"
@@ -58,11 +62,12 @@ function Screenlogin(props) {
                 <AppText style={{ color: colors.tipkana }}>
                   {errors.email}
                 </AppText>
-                <AppTextImput
+                <AppText style={{ paddingTop: 10 }}>Šifra</AppText>
+                <AppTextInput
                   icon="key"
                   autoCorrect={false}
                   secureTextEntry
-                  placeholder="Password"
+                  placeholder="******"
                   onChangeText={handleChange("password")}
                   height1={50}
                 />

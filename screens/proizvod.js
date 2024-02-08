@@ -8,6 +8,7 @@ import Korisnik from "../components/Korisnik";
 import firestore, { doc, getDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase";
+import Upit from "./Upit/Upit";
 
 function Proizvod({ route, navigation }) {
   const [user, setUser] = useState();
@@ -38,6 +39,8 @@ function Proizvod({ route, navigation }) {
   const pozovi = () => {
     Linking.openURL("tel: 0603305543");
     console.log("pozvao");
+
+    naviagtion.navigate("Upit");
   };
 
   const getDate = (timestamp) => {
